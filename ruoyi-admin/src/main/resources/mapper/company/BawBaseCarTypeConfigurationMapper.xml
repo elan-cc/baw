@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawBaseCarTypeConfigurationMapper">
+
+    <resultMap type="BawBaseCarTypeConfiguration" id="BawBaseCarTypeConfigurationResult">
+        <result property="id"    column="id"    />
+        <result property="carConfigCode"    column="car_config_code"    />
+        <result property="carConfigCn"    column="car_config_cn"    />
+        <result property="carBrandCode"    column="car_brand_code"    />
+        <result property="carTypeCode"    column="car_type_code"    />
+        <result property="isEnable"    column="is_enable"    />
+        <result property="carColorCode"    column="car_color_code"    />
+        <result property="carIncolorCode"    column="car_incolor_code"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectBawBaseCarTypeConfigurationVo">
+        select id, car_config_code, car_config_cn, car_brand_code, car_type_code, is_enable, car_color_code, car_incolor_code, create_time, create_by, update_time, update_by from baw_base_car_type_configuration
+    </sql>
+
+    <select id="selectBawBaseCarTypeConfigurationList" parameterType="BawBaseCarTypeConfiguration" resultMap="BawBaseCarTypeConfigurationResult">
+        <include refid="selectBawBaseCarTypeConfigurationVo"/>
+        <where>
+            <if test="carConfigCode != null  and carConfigCode != ''"> and car_config_code = #{carConfigCode}</if>
+            <if test="carConfigCn != null  and carConfigCn != ''"> and car_config_cn = #{carConfigCn}</if>
+            <if test="carBrandCode != null  and carBrandCode != ''"> and car_brand_code = #{carBrandCode}</if>
+            <if test="carTypeCode != null  and carTypeCode != ''"> and car_type_code = #{carTypeCode}</if>
+            <if test="isEnable != null  and isEnable != ''"> and is_enable = #{isEnable}</if>
+            <if test="carColorCode != null  and carColorCode != ''"> and car_color_code = #{carColorCode}</if>
+            <if test="carIncolorCode != null  and carIncolorCode != ''"> and car_incolor_code = #{carIncolorCode}</if>
+        </where>
+    </select>
+
+    <select id="selectBawBaseCarTypeConfigurationById" parameterType="Integer" resultMap="BawBaseCarTypeConfigurationResult">
+        <include refid="selectBawBaseCarTypeConfigurationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawBaseCarTypeConfiguration" parameterType="BawBaseCarTypeConfiguration" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_base_car_type_configuration
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carConfigCode != null">car_config_code,</if>
+            <if test="carConfigCn != null">car_config_cn,</if>
+            <if test="carBrandCode != null">car_brand_code,</if>
+            <if test="carTypeCode != null">car_type_code,</if>
+            <if test="isEnable != null">is_enable,</if>
+            <if test="carColorCode != null">car_color_code,</if>
+            <if test="carIncolorCode != null">car_incolor_code,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carConfigCode != null">#{carConfigCode},</if>
+            <if test="carConfigCn != null">#{carConfigCn},</if>
+            <if test="carBrandCode != null">#{carBrandCode},</if>
+            <if test="carTypeCode != null">#{carTypeCode},</if>
+            <if test="isEnable != null">#{isEnable},</if>
+            <if test="carColorCode != null">#{carColorCode},</if>
+            <if test="carIncolorCode != null">#{carIncolorCode},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawBaseCarTypeConfiguration" parameterType="BawBaseCarTypeConfiguration">
+        update baw_base_car_type_configuration
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carConfigCode != null">car_config_code = #{carConfigCode},</if>
+            <if test="carConfigCn != null">car_config_cn = #{carConfigCn},</if>
+            <if test="carBrandCode != null">car_brand_code = #{carBrandCode},</if>
+            <if test="carTypeCode != null">car_type_code = #{carTypeCode},</if>
+            <if test="isEnable != null">is_enable = #{isEnable},</if>
+            <if test="carColorCode != null">car_color_code = #{carColorCode},</if>
+            <if test="carIncolorCode != null">car_incolor_code = #{carIncolorCode},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawBaseCarTypeConfigurationById" parameterType="Integer">
+        delete from baw_base_car_type_configuration where id = #{id}
+    </delete>
+
+    <delete id="deleteBawBaseCarTypeConfigurationByIds" parameterType="String">
+        delete from baw_base_car_type_configuration where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

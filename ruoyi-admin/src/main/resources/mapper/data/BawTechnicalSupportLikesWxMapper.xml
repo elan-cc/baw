@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawTechnicalSupportLikesWxMapper">
+    
+    <resultMap type="BawTechnicalSupportLikesWx" id="BawTechnicalSupportLikesWxResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="techId"    column="tech_id"    />
+        <result property="likesTime"    column="likes_time"    />
+    </resultMap>
+
+    <sql id="selectBawTechnicalSupportLikesWxVo">
+        select id, user_id, tech_id, likes_time from baw_technical_support_likes_wx
+    </sql>
+
+    <select id="selectBawTechnicalSupportLikesWxList" parameterType="BawTechnicalSupportLikesWx" resultMap="BawTechnicalSupportLikesWxResult">
+        <include refid="selectBawTechnicalSupportLikesWxVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="techId != null "> and tech_id = #{techId}</if>
+            <if test="likesTime != null "> and likes_time = #{likesTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectBawTechnicalSupportLikesWxById" parameterType="Integer" resultMap="BawTechnicalSupportLikesWxResult">
+        <include refid="selectBawTechnicalSupportLikesWxVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawTechnicalSupportLikesWx" parameterType="BawTechnicalSupportLikesWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_technical_support_likes_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="techId != null">tech_id,</if>
+            <if test="likesTime != null">likes_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="techId != null">#{techId},</if>
+            <if test="likesTime != null">#{likesTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawTechnicalSupportLikesWx" parameterType="BawTechnicalSupportLikesWx">
+        update baw_technical_support_likes_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="techId != null">tech_id = #{techId},</if>
+            <if test="likesTime != null">likes_time = #{likesTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawTechnicalSupportLikesWxById" parameterType="Integer">
+        delete from baw_technical_support_likes_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawTechnicalSupportLikesWxByIds" parameterType="String">
+        delete from baw_technical_support_likes_wx where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

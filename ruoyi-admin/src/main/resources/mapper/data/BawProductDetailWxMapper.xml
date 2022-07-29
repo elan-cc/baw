@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawProductDetailWxMapper">
+
+    <resultMap type="BawProductDetailWx" id="BawProductDetailWxResult">
+        <result property="id"    column="id"    />
+        <result property="manualId"    column="manual_id"    />
+        <result property="tittle"    column="tittle"    />
+        <result property="content"    column="content"    />
+        <result property="orderNum"    column="order_num"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBawProductDetailWxVo">
+        select id, manual_id, tittle, content, order_num, create_by, create_time, update_by, update_time from baw_product_detail_wx
+    </sql>
+
+    <select id="selectBawProductDetailWxList" parameterType="BawProductDetailWx" resultMap="BawProductDetailWxResult">
+        <include refid="selectBawProductDetailWxVo"/>
+        <where>
+            <if test="manualId != null "> and manual_id = #{manualId}</if>
+            <if test="tittle != null  and tittle != ''"> and tittle = #{tittle}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="orderNum != null "> and order_num = #{orderNum}</if>
+        </where>
+        order by order_num
+    </select>
+
+    <select id="selectBawProductDetailWxById" parameterType="Integer" resultMap="BawProductDetailWxResult">
+        <include refid="selectBawProductDetailWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawProductDetailWx" parameterType="BawProductDetailWx">
+        insert into baw_product_detail_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="manualId != null">manual_id,</if>
+            <if test="tittle != null">tittle,</if>
+            <if test="content != null">content,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="manualId != null">#{manualId},</if>
+            <if test="tittle != null">#{tittle},</if>
+            <if test="content != null">#{content},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawProductDetailWx" parameterType="BawProductDetailWx">
+        update baw_product_detail_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="manualId != null">manual_id = #{manualId},</if>
+            <if test="tittle != null">tittle = #{tittle},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawProductDetailWxById" parameterType="Integer">
+        delete from baw_product_detail_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawProductDetailWxByIds" parameterType="String">
+        delete from baw_product_detail_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectId" resultType="org.springframework.ui.ModelMap">
+        select id,tittle,content,order_num from baw_product_detail_wx where manual_id = #{manualId}  order by order_num
+    </select>
+    <select id="selectDetailWxById" parameterType="Integer" resultType="org.springframework.ui.ModelMap">
+        select id,tittle,content,order_num from   baw_product_detail_wx
+        where id = #{id}
+    </select>
+</mapper>

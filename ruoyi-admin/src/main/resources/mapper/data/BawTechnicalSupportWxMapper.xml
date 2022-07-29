@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawTechnicalSupportWxMapper">
+    
+    <resultMap type="BawTechnicalSupportWx" id="BawTechnicalSupportWxResult">
+        <result property="id"    column="id"    />
+        <result property="techTitle"    column="tech_title"    />
+        <result property="techPicture"    column="tech_picture"    />
+        <result property="techDescribe"    column="tech_describe"    />
+        <result property="techContent"    column="tech_content"    />
+        <result property="techReleaseTime"    column="tech_release_time"    />
+        <result property="techPlate"    column="tech_plate"    />
+        <result property="techArticleEnable"    column="tech_article_enable"    />
+        <result property="techCommentEnable"    column="tech_comment_enable"    />
+        <result property="techSource"    column="tech_source"    />
+        <result property="techViewsCount"    column="tech_views_count"    />
+        <result property="techLikesNumber"    column="tech_likes_number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="techIsDelete"    column="tech_is_delete"    />
+    </resultMap>
+
+    <sql id="selectBawTechnicalSupportWxVo">
+        select id, tech_title, tech_picture, tech_describe, tech_content, tech_release_time, tech_plate, tech_article_enable, tech_comment_enable, tech_source, tech_views_count, tech_likes_number, create_time, create_by, update_time, update_by, tech_is_delete from baw_technical_support_wx
+    </sql>
+
+    <select id="selectBawTechnicalSupportWxList" parameterType="BawTechnicalSupportWx" resultMap="BawTechnicalSupportWxResult">
+        <include refid="selectBawTechnicalSupportWxVo"/>
+        <where>  
+            <if test="techTitle != null  and techTitle != ''"> and tech_title like concat('%', #{techTitle}, '%')</if>
+            <if test="techPlate != null "> and tech_plate = #{techPlate}</if>
+            <if test="techArticleEnable != null "> and tech_article_enable = #{techArticleEnable}</if>
+            <if test="techCommentEnable != null "> and tech_comment_enable = #{techCommentEnable}</if>
+        </where>
+    </select>
+    
+    <select id="selectBawTechnicalSupportWxById" parameterType="Integer" resultMap="BawTechnicalSupportWxResult">
+        <include refid="selectBawTechnicalSupportWxVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawTechnicalSupportWx" parameterType="BawTechnicalSupportWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_technical_support_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="techTitle != null">tech_title,</if>
+            <if test="techPicture != null">tech_picture,</if>
+            <if test="techDescribe != null">tech_describe,</if>
+            <if test="techContent != null">tech_content,</if>
+            <if test="techReleaseTime != null">tech_release_time,</if>
+            <if test="techPlate != null">tech_plate,</if>
+            <if test="techArticleEnable != null">tech_article_enable,</if>
+            <if test="techCommentEnable != null">tech_comment_enable,</if>
+            <if test="techSource != null">tech_source,</if>
+            <if test="techViewsCount != null">tech_views_count,</if>
+            <if test="techLikesNumber != null">tech_likes_number,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="techIsDelete != null">tech_is_delete,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="techTitle != null">#{techTitle},</if>
+            <if test="techPicture != null">#{techPicture},</if>
+            <if test="techDescribe != null">#{techDescribe},</if>
+            <if test="techContent != null">#{techContent},</if>
+            <if test="techReleaseTime != null">#{techReleaseTime},</if>
+            <if test="techPlate != null">#{techPlate},</if>
+            <if test="techArticleEnable != null">#{techArticleEnable},</if>
+            <if test="techCommentEnable != null">#{techCommentEnable},</if>
+            <if test="techSource != null">#{techSource},</if>
+            <if test="techViewsCount != null">#{techViewsCount},</if>
+            <if test="techLikesNumber != null">#{techLikesNumber},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="techIsDelete != null">#{techIsDelete},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawTechnicalSupportWx" parameterType="BawTechnicalSupportWx">
+        update baw_technical_support_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="techTitle != null">tech_title = #{techTitle},</if>
+            <if test="techPicture != null">tech_picture = #{techPicture},</if>
+            <if test="techDescribe != null">tech_describe = #{techDescribe},</if>
+            <if test="techContent != null">tech_content = #{techContent},</if>
+            <if test="techReleaseTime != null">tech_release_time = #{techReleaseTime},</if>
+            <if test="techPlate != null">tech_plate = #{techPlate},</if>
+            <if test="techArticleEnable != null">tech_article_enable = #{techArticleEnable},</if>
+            <if test="techCommentEnable != null">tech_comment_enable = #{techCommentEnable},</if>
+            <if test="techSource != null">tech_source = #{techSource},</if>
+            <if test="techViewsCount != null">tech_views_count = #{techViewsCount},</if>
+            <if test="techLikesNumber != null">tech_likes_number = #{techLikesNumber},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="techIsDelete != null">tech_is_delete = #{techIsDelete},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+<!--    <delete id="deleteBawTechnicalSupportWxById" parameterType="Integer">-->
+<!--        delete from baw_technical_support_wx where id = #{id}-->
+<!--    </delete>-->
+    <update id="deleteBawTechnicalSupportWxById" parameterType="Integer">
+        update baw_technical_support_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="techIsDelete != null">tech_is_delete = 1,</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteBawTechnicalSupportWxByIds" parameterType="String">
+        delete from baw_technical_support_wx where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

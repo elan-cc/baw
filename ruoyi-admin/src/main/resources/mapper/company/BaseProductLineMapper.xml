@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BaseProductLineMapper">
+
+    <resultMap type="BawBaseProductLine" id="BawBaseProductLineResult">
+        <result property="id"    column="id"   />
+        <result property="carCatagoriesCode"    column="car_catagories_code"    />
+        <result property="carCatagoriesEn"    column="car_catagories_en"    />
+        <result property="carCatagoriesCn"    column="car_catagories_cn"    />
+        <result property="carBrandCode"    column="car_brand_code"    />
+        <result property="isEnable"    column="is_enable"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectBawBaseProductLineVo">
+        select id, car_catagories_code, car_catagories_en, car_catagories_cn, car_brand_code, is_enable, create_time, create_by from baw_base_product_line
+    </sql>
+
+    <select id="selectbawBaseProductLineList" parameterType="BawBaseProductLine" resultMap="BawBaseProductLineResult">
+        <include refid="selectBawBaseProductLineVo"/>
+        <where>
+            <if test="carCatagoriesCode != null  and carCatagoriesCode != ''"> and car_catagories_code = #{carCatagoriesCode}</if>
+            <if test="carCatagoriesEn != null  and carCatagoriesEn != ''"> and car_catagories_en = #{carCatagoriesEn}</if>
+            <if test="carCatagoriesCn != null  and carCatagoriesCn != ''"> and car_catagories_cn = #{carCatagoriesCn}</if>
+            <if test="carBrandCode != null  and carBrandCode != ''"> and car_brand_code = #{carBrandCode}</if>
+            <if test="isEnable != null  and isEnable != ''"> and is_enable = #{isEnable}</if>
+            <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </where>
+    </select>
+
+    <select id="selectbawBaseProductLineById" parameterType="Integer" resultMap="BawBaseProductLineResult">
+        <include refid="selectBawBaseProductLineVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertbawBaseProductLine" parameterType="BawBaseProductLine" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_base_product_line
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carCatagoriesCode != null">car_catagories_code,</if>
+            <if test="carCatagoriesEn != null">car_catagories_en,</if>
+            <if test="carCatagoriesCn != null">car_catagories_cn,</if>
+            <if test="carBrandCode != null">car_brand_code,</if>
+            <if test="isEnable != null">is_enable,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carCatagoriesCode != null">#{carCatagoriesCode},</if>
+            <if test="carCatagoriesEn != null">#{carCatagoriesEn},</if>
+            <if test="carCatagoriesCn != null">#{carCatagoriesCn},</if>
+            <if test="carBrandCode != null">#{carBrandCode},</if>
+            <if test="isEnable != null">#{isEnable},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updatebawBaseProductLine" parameterType="BawBaseProductLine">
+        update baw_base_product_line
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carCatagoriesCode != null  and carCatagoriesCode != ''"> and car_catagories_code = #{carCatagoriesCode}</if>
+            <if test="carCatagoriesEn != null  and carCatagoriesEn != ''"> and car_catagories_en = #{carCatagoriesEn}</if>
+            <if test="carCatagoriesCn != null  and carCatagoriesCn != ''"> and car_catagories_cn = #{carCatagoriesCn}</if>
+            <if test="carBrandCode != null  and carBrandCode != ''"> and car_brand_code = #{carBrandCode}</if>
+            <if test="isEnable != null  and isEnable != ''"> and is_enable = #{isEnable}</if>
+            <if test="createTime != null  and createTime != ''"> and create_time = #{createTime}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletebawBaseProductLineById" parameterType="Integer">
+        delete from baw_base_product_line where id = #{id}
+    </delete>
+
+    <delete id="deletebawBaseProductLineByIds" parameterType="String">
+        delete from baw_base_product_line where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

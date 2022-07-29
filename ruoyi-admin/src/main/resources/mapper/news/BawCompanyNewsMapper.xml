@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawCompanyNewsMapper">
+    
+    <resultMap type="BawCompanyNews" id="BawCompanyNewsResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="subTitle"    column="sub_title"    />
+        <result property="description"    column="description"    />
+        <result property="pic"    column="pic"    />
+        <result property="content"    column="content"    />
+        <result property="fabuDate"    column="fabu_date"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="sort"    column="sort"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawCompanyNewsVo">
+        select id, title, sub_title, description, pic, content, fabu_date, is_disable, is_delete, sort, add_user, add_date from baw_company_news
+    </sql>
+
+    <select id="selectBawCompanyNewsList" parameterType="BawCompanyNews" resultMap="BawCompanyNewsResult">
+        <include refid="selectBawCompanyNewsVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by fabu_date desc
+    </select>
+
+    <select id="selectBawCompanyNewsListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, title, sub_title, description, pic, content, fabu_date
+        from baw_company_news
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="year != null and year != 0 "> and FROM_UNIXTIME(fabu_date,'%Y') = #{year}</if>
+            <if test="month != null and month != 0 "> and FROM_UNIXTIME(fabu_date,'%c') = #{month}</if>
+            <if test="keywords != null  and keywords != ''"> and title like concat('%', #{keywords}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBawCompanyNewsYearMonthListForApi" resultType="org.springframework.ui.ModelMap">
+        SELECT FROM_UNIXTIME(fabu_date,'%Y') as date_year,FROM_UNIXTIME(fabu_date,'%m') as date_month FROM `baw_company_news` group by date_year,date_month order by date_year desc,date_month desc
+    </select>
+    
+    <select id="selectBawCompanyNewsById" parameterType="Integer" resultMap="BawCompanyNewsResult">
+        <include refid="selectBawCompanyNewsVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBawCompanyNewsByIdForApi" parameterType="Integer" resultType="org.springframework.ui.ModelMap">
+        select id, title, sub_title, description, pic, content, fabu_date
+        from baw_company_news
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawCompanyNews" parameterType="BawCompanyNews" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_company_news
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">title,</if>
+            <if test="subTitle != null">sub_title,</if>
+            <if test="description != null">description,</if>
+            <if test="pic != null">pic,</if>
+            <if test="content != null">content,</if>
+            <if test="fabuDate != null">fabu_date,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="sort != null">sort,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="subTitle != null">#{subTitle},</if>
+            <if test="description != null">#{description},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="content != null">#{content},</if>
+            <if test="fabuDate != null">#{fabuDate},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawCompanyNews" parameterType="BawCompanyNews">
+        update baw_company_news
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="subTitle != null">sub_title = #{subTitle},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="fabuDate != null">fabu_date = #{fabuDate},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawCompanyNewsById" parameterType="Integer">
+        update baw_company_news set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawCompanyNewsByIds" parameterType="String">
+        update baw_company_news set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawCompanyNewsByIdPhysic" parameterType="Integer">
+        delete from baw_company_news where id = #{id}
+    </delete>
+
+    <delete id="deleteBawCompanyNewsByIdsPhysic" parameterType="String">
+        delete from baw_company_news where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

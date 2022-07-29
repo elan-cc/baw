@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawProductManualMapper">
+
+    <resultMap type="BawProductManual" id="BawProductManualResult">
+        <result property="id"    column="id"    />
+        <result property="carName"    column="car_name"    />
+        <result property="picture"    column="picture"    />
+        <result property="title"    column="title"    />
+        <result property="creatyTime"    column="creaty_time"    />
+        <result property="content"    column="content"    />
+        <result property="browseQuantity"    column="browse_quantity"    />
+        <result property="analysisQuantity"    column="analysis_quantity"    />
+        <result property="likesQuantity"    column="likes_quantity"    />
+    </resultMap>
+
+    <sql id="selectBawProductManualVo">
+        select id, car_name, picture, title, creaty_time, content, browse_quantity, analysis_quantity, likes_quantity from baw_product_manual
+    </sql>
+
+    <select id="selectBawProductManualList" parameterType="BawProductManual" resultMap="BawProductManualResult">
+        <include refid="selectBawProductManualVo"/>
+        <where>
+            <if test="carName != null  and carName != ''"> and car_name like concat('%', #{carName}, '%')</if>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="creatyTime != null "> and creaty_time = #{creatyTime}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="browseQuantity != null  and browseQuantity != ''"> and browse_quantity = #{browseQuantity}</if>
+            <if test="analysisQuantity != null  and analysisQuantity != ''"> and analysis_quantity = #{analysisQuantity}</if>
+            <if test="likesQuantity != null  and likesQuantity != ''"> and likes_quantity = #{likesQuantity}</if>
+        </where>
+    </select>
+
+    <select id="selectBawProductManualById" parameterType="Integer" resultMap="BawProductManualResult">
+        <include refid="selectBawProductManualVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawProductManual" parameterType="BawProductManual" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_product_manual
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carName != null">car_name,</if>
+            <if test="picture != null">picture,</if>
+            <if test="title != null">title,</if>
+            <if test="creatyTime != null">creaty_time,</if>
+            <if test="content != null">content,</if>
+            <if test="browseQuantity != null">browse_quantity,</if>
+            <if test="analysisQuantity != null">analysis_quantity,</if>
+            <if test="likesQuantity != null">likes_quantity,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carName != null">#{carName},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="title != null">#{title},</if>
+            <if test="creatyTime != null">#{creatyTime},</if>
+            <if test="content != null">#{content},</if>
+            <if test="browseQuantity != null">#{browseQuantity},</if>
+            <if test="analysisQuantity != null">#{analysisQuantity},</if>
+            <if test="likesQuantity != null">#{likesQuantity},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawProductManual" parameterType="BawProductManual">
+        update baw_product_manual
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carName != null">car_name = #{carName},</if>
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="title != null">title = #{title},</if>
+            <if test="creatyTime != null">creaty_time = #{creatyTime},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="browseQuantity != null">browse_quantity = #{browseQuantity},</if>
+            <if test="analysisQuantity != null">analysis_quantity = #{analysisQuantity},</if>
+            <if test="likesQuantity != null">likes_quantity = #{likesQuantity},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawProductManualById" parameterType="Integer">
+        delete from baw_product_manual where id = #{id}
+    </delete>
+
+    <delete id="deleteBawProductManualByIds" parameterType="String">
+        delete from baw_product_manual where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <update id="share">
+        UPDATE baw_product_manual
+        SET analysis_quantity = analysis_quantity + 1
+        WHERE
+                id = #{id}
+    </update>
+
+    <update id="Unlike">
+        UPDATE baw_product_manual
+        SET likes_quantity = likes_quantity - 1
+        WHERE
+                id = #{id}
+    </update>
+
+    <update id="like">
+        UPDATE baw_product_manual
+        SET likes_quantity = likes_quantity + 1
+        WHERE
+                id = #{id}
+    </update>
+
+
+
+    <select id="selectId" parameterType="Integer" resultType="org.springframework.ui.ModelMap">
+        select car_name,picture from baw_product_manual where id = #{id}
+    </select>
+</mapper>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增门店信息')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-baw_base_dealershop-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">crm客户代码：</label>
+                <div class="col-sm-8">
+                    <input name="dlrCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">SAP客户代码：</label>
+                <div class="col-sm-8">
+                    <input name="kunnr" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户简称：</label>
+                <div class="col-sm-8">
+                    <input name="buSort1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户全称：</label>
+                <div class="col-sm-8">
+                    <input name="nameOrg1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">客户代码：</label>
+                <div class="col-sm-8">
+                    <input name="eikto" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">经度：</label>
+                <div class="col-sm-8">
+                    <input name="lng" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">维度：</label>
+                <div class="col-sm-8">
+                    <input name="lat" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：0-禁用，1-启用：</label>
+                <div class="col-sm-8">
+                    <input name="isEnable" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">上线状态 0-未上线，1-已上线：</label>
+                <div class="col-sm-8">
+                    <input name="onlineFlag" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">建店状态 0-停业 1-营业 2-在建 3-取消 4-整改：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box">
+                        <input type="radio" name="dlrStatus" value="">
+                        <label th:for="dlrStatus" th:text="未知"></label>
+                    </div>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">门店类别:A-加盟店,O-直营店：</label>
+                <div class="col-sm-8">
+                    <select name="zdlrType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">专营店类别:A-服务中心,D-交付中心,W-4S店：</label>
+                <div class="col-sm-8">
+                    <select name="orgType" class="form-control m-b">
+                        <option value="">所有</option>
+                    </select>
+                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">门店地址：</label>
+                <div class="col-sm-8">
+                    <textarea name="street" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">邮编：</label>
+                <div class="col-sm-8">
+                    <input name="postCode1" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">省代码：</label>
+                <div class="col-sm-8">
+                    <input name="region" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">市代码：</label>
+                <div class="col-sm-8">
+                    <input name="cityc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">县代码：</label>
+                <div class="col-sm-8">
+                    <input name="counc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">大区：</label>
+                <div class="col-sm-8">
+                    <input name="bzirk" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">销售办事处：</label>
+                <div class="col-sm-8">
+                    <input name="vkbur" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">门店联系人：</label>
+                <div class="col-sm-8">
+                    <input name="adext" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">门店联系人电话：</label>
+                <div class="col-sm-8">
+                    <input name="mobNumber" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">门店热线电话：</label>
+                <div class="col-sm-8">
+                    <input name="telNumber" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">门店邮箱：</label>
+                <div class="col-sm-8">
+                    <input name="smtpAddr" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">门店传真：</label>
+                <div class="col-sm-8">
+                    <input name="faxNumber" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "wx/baw_base_dealershop"
+        $("#form-baw_base_dealershop-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-baw_base_dealershop-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

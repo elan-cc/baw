@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawMeidaCenterMapper">
+    
+    <resultMap type="BawMeidaCenter" id="BawMeidaCenterResult">
+        <result property="id"    column="id"    />
+        <result property="mediaType"    column="media_type"    />
+        <result property="title"    column="title"    />
+        <result property="subTitle"    column="sub_title"    />
+        <result property="description"    column="description"    />
+        <result property="pic"    column="pic"    />
+        <result property="videoUrl"    column="video_url"    />
+        <result property="videoTime"    column="video_time"    />
+        <result property="content"    column="content"    />
+        <result property="fabuDate"    column="fabu_date"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="sort"    column="sort"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawMeidaCenterVo">
+        select id, media_type, title, sub_title, description, pic, video_url, video_time, content, fabu_date, is_disable, is_delete, sort, add_user, add_date from baw_meida_center
+    </sql>
+
+    <select id="selectBawMeidaCenterList" parameterType="BawMeidaCenter" resultMap="BawMeidaCenterResult">
+        <include refid="selectBawMeidaCenterVo"/>
+        <where>  
+            <if test="mediaType != null "> and media_type = #{mediaType}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by fabu_date desc
+    </select>
+
+    <select id="selectBawMeidaCenterListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, media_type, title, sub_title, description, pic, video_url, video_time, content, fabu_date
+        from baw_meida_center
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="year != null and year != 0 "> and FROM_UNIXTIME(fabu_date,'%Y') = #{year}</if>
+            <if test="month != null and month != 0 "> and FROM_UNIXTIME(fabu_date,'%c') = #{month}</if>
+            <if test="mediaType != null and mediaType != 0 "> and media_type = #{mediaType}</if>
+            <if test="keywords != null  and keywords != ''"> and title like concat('%', #{keywords}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBawMeidaCenterYearMonthListForApi" resultType="org.springframework.ui.ModelMap">
+        SELECT FROM_UNIXTIME(fabu_date,'%Y') as date_year,FROM_UNIXTIME(fabu_date,'%m') as date_month FROM `baw_meida_center` group by date_year,date_month order by date_year desc,date_month desc
+    </select>
+    
+    <select id="selectBawMeidaCenterById" parameterType="Integer" resultMap="BawMeidaCenterResult">
+        <include refid="selectBawMeidaCenterVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBawMeidaCenterByIdForApi" parameterType="Integer" resultType="org.springframework.ui.ModelMap">
+        select id, media_type, title, sub_title, description, pic, video_url, video_time, content, fabu_date
+        from baw_meida_center
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawMeidaCenter" parameterType="BawMeidaCenter" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_meida_center
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mediaType != null">media_type,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="subTitle != null">sub_title,</if>
+            <if test="description != null">description,</if>
+            <if test="pic != null">pic,</if>
+            <if test="videoUrl != null">video_url,</if>
+            <if test="videoTime != null">video_time,</if>
+            <if test="content != null">content,</if>
+            <if test="fabuDate != null">fabu_date,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="sort != null">sort,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mediaType != null">#{mediaType},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="subTitle != null">#{subTitle},</if>
+            <if test="description != null">#{description},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="videoUrl != null">#{videoUrl},</if>
+            <if test="videoTime != null">#{videoTime},</if>
+            <if test="content != null">#{content},</if>
+            <if test="fabuDate != null">#{fabuDate},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawMeidaCenter" parameterType="BawMeidaCenter">
+        update baw_meida_center
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mediaType != null">media_type = #{mediaType},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="subTitle != null">sub_title = #{subTitle},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="videoUrl != null">video_url = #{videoUrl},</if>
+            <if test="videoTime != null">video_time = #{videoTime},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="fabuDate != null">fabu_date = #{fabuDate},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawMeidaCenterById" parameterType="Integer">
+        update baw_meida_center set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawMeidaCenterByIds" parameterType="String">
+        update baw_meida_center set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawMeidaCenterByIdPhysic" parameterType="Integer">
+        delete from baw_meida_center where id = #{id}
+    </delete>
+
+    <delete id="deleteBawMeidaCenterByIdsPhysic" parameterType="String">
+        delete from baw_meida_center where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

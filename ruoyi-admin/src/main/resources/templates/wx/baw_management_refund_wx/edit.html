@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改退款单')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-baw_management_refund_wx-edit" th:object="${bawManagementRefundWx}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">订单id：</label>
+                <div class="col-sm-8">
+                    <input name="managementId" th:field="*{managementId}" class="form-control" type="text" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">订单编号：</label>
+                <div class="col-sm-8">
+                    <input name="managementNumber" th:field="*{managementNumber}" class="form-control" type="text" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">订单金额：</label>
+                <div class="col-sm-8">
+                    <input name="managementMoney" th:field="*{managementMoney}" class="form-control" type="text" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">退款金额：</label>
+                <div class="col-sm-8">
+                    <input name="refundMoney" th:field="*{refundMoney}" class="form-control" type="text" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">货物状态：</label>
+                <div class="col-sm-8">
+                        <select name="cargoStatus" class="form-control m-b" th:with="type=${@dict.getType('baw_cargo_status')}" disabled>
+                            <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{cargoStatus}" disabled></option>
+                        </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">退款原因：</label>
+                <div class="col-sm-8">
+                    <select name="refundReason" class="form-control m-b" th:with="type=${@dict.getType('reason_for_refund')}" disabled>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{refundReason}" disabled></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">描述：</label>
+                <div class="col-sm-8">
+                    <textarea name="describe" th:field="*{describe}" class="form-control" type="text" disabled/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">凭证图片：</label>
+                <div class="col-sm-10">
+                    <input name="pictureUrl" id="pic" th:field="*{pictureUrl}" class="form-control" type="hidden">
+                    <a id="url"><img th:src="*{pictureUrl}" style="width:467px;height: 300px; margin-left: 190px"></a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">退款编号：</label>
+                <div class="col-sm-8">
+                    <input name="refundNumber" th:field="*{refundNumber}" class="form-control" type="text" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">申请退款时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="applyRefundTime" th:value="${#dates.format(bawManagementRefundWx.applyRefundTime, 'yyyy-MM-dd HH:mm:ss')}" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text" disabled>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">退款类型：</label>
+                <div class="col-sm-8">
+                    <select name="refundType" class="form-control m-b" th:with="type=${@dict.getType('baw_refund_type')}" disabled>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{refundType}" disabled></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">退款状态：</label>
+                <div class="col-sm-8">
+                    <select style="width: 100%; text-overflow: ellipsis;" name="refundStatus" class="form-control m-b" th:with="type=${@dict.getType('baw_refund_status')}" disabled>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{refundStatus}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">失败原因：</label>
+                <div class="col-sm-8">
+                    <textarea name="failureReason" th:field="*{failureReason}" class="form-control" type="text" disabled/>
+                </div>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-3 control-label">用户id：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="userId" th:field="*{userId}" class="form-control" type="text" disabled>-->
+<!--                </div>-->
+<!--            </div>-->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">审核人：</label>
+                <div class="col-sm-8">
+                    <input name="reviewer" th:field="*{reviewer}" class="form-control" type="text" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">审核时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <input name="approvalTime" th:value="${#dates.format(bawManagementRefundWx.approvalTime, 'yyyy-MM-dd HH:mm:ss')}" class="form-control" placeholder="yyyy-MM-dd HH:mm:ss" type="text" disabled>
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "wx/baw_management_refund_wx";
+        $("#form-baw_management_refund_wx-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-baw_management_refund_wx-edit').serialize());
+            }
+        }
+
+        // $("input[name='applyRefundTime']").datetimepicker({
+        //     format: "yyyy-mm-dd HH:mm:ss",
+        //     minView: "month",
+        //     autoclose: true
+        // });
+        //
+        // $("input[name='approvalTime']").datetimepicker({
+        //     format: "yyyy-mm-dd HH:mm:ss",
+        //     minView: "month",
+        //     autoclose: true
+        // });
+    </script>
+</body>
+</html>

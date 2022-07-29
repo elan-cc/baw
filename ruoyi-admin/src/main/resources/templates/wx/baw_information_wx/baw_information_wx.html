@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('官方资讯/精彩推荐列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>标题：</label>
+                                <input type="text" name="infoTitle"/>
+                            </li>
+                            <li>
+                                <label>焦点：</label>
+                                <select name="infoFocus" th:with="type=${@dict.getType('information_focus')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>文章启用：</label>
+                                <select name="infoArticleEnable" th:with="type=${@dict.getType('information_article_enable')}">
+                                    <option value="">所有</option>
+                                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="wx:baw_information_wx:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+<!--                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="wx:baw_information_wx:edit">-->
+<!--                    <i class="fa fa-edit"></i> 修改-->
+<!--                </a>-->
+<!--                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="wx:baw_information_wx:remove">-->
+<!--                    <i class="fa fa-remove"></i> 删除-->
+<!--                </a>-->
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="wx:baw_information_wx:export">
+                    <i class="fa fa
+                    -download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('wx:baw_information_wx:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('wx:baw_information_wx:remove')}]];
+        var infoFocusDatas = [[${@dict.getType('information_focus')}]];
+        var infoArticleEnableDatas = [[${@dict.getType('information_article_enable')}]];
+        var bawInformationType = [[${@dict.getType('baw_information_type')}]];
+        var infoCommentEnableDatas = [[${@dict.getType('information_comment_enable')}]];
+        var commentFlag = [[${@permission.hasPermi('wx:baw_information_comment_wx:list')}]];
+        var prefix = ctx + "wx/baw_information_wx";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                commentUrl: prefix + "/commentList/{id}",
+                modalName: "官方资讯/精彩推荐",
+                columns: [
+
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'infoTitle',
+                    title: '标题',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value);
+                    }
+                },
+                // {
+                //     field: 'infoPicture',
+                //     title: '图片'
+                // },
+                {
+                    field: 'infoDescribe',
+                    title: '描述',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value);
+                    }
+                },
+                // {
+                //     field: 'infoContent',
+                //     title: '内容'
+                // },
+                {
+                    field: 'createTime',
+                    title: '发布时间'
+                },
+                {
+                    field: 'infoFocus',
+                    title: '焦点',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(infoFocusDatas, value);
+                    }
+                },
+                {
+                    field: 'infoArticleEnable',
+                    title: '文章启用',
+                    formatter: function(value, row, index) {
+                       return $.table.selectDictLabel(infoArticleEnableDatas, value);
+                    }
+                },
+                // {
+                //     field: 'infoCommentEnable',
+                //     title: '评论启用',
+                //     formatter: function(value, row, index) {
+                //        return $.table.selectDictLabel(infoCommentEnableDatas, value);
+                //     }
+                // },
+                // {
+                //     field: 'infoSource',
+                //     title: '来源'
+                // },
+                {
+                    field: 'infoLikesNumber',
+                    title: '点赞数'
+                },
+                {
+                    field: 'infoViewsCount',
+                    title: '浏览数'
+                },
+                    {
+                        field: 'type',
+                        title: '类型',
+                        formatter: function (value, row, index) {
+                            return $.table.selectDictLabel(bawInformationType, value);
+                        }
+                    },
+
+                    {
+                        field: 'share_count',
+                        title: '分享数量'
+                    },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        // actions.push('<a class="btn btn-success btn-xs ' + commentFlag + '" href="javascript:void(0)" onclick="commentList(' + row.id + ',' + row.infoTitle + ')"><i class="fa fa-edit"></i>查看评论</a> ');
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        if (row.infoFocus != 2) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="toFocus(' + row.id + ',' + row.infoFocus+',2,\'设置《' + row.infoTitle + '》为设为焦点咨询吗\')"><i class="fa fa-edit"></i >设为焦点</a> ');
+                        } else if (row.infoFocus == 2) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="toFocus(' + row.id + ',' + row.infoFocus + ',1,\'设置《' + row.infoTitle + '》为设为普通咨询吗\')"><i class="fa fa-edit"></i >设为普通</a> ');
+                        }
+                        if (row.infoArticleEnable != 1) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="toArticleEnable(' + row.id + ',' + row.infoArticleEnable+',1,\'启用《' + row.infoTitle + '》吗\')"><i class="fa fa-edit"></i >启用</a> ');
+                        } else if (row.infoArticleEnable == 1) {
+                            actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="toArticleEnable(' + row.id + ',' + row.infoArticleEnable + ',2,\'禁用《' + row.infoTitle + '》吗\')"><i class="fa fa-edit"></i >禁用</a> ');
+                        }
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+
+        function toFocus(id,infoFocus,i,questionTitle) {
+            table.set();
+            $.modal.confirm("确定" + questionTitle, function () {
+                $.ajax({
+                    url: prefix + "/edit",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        infoFocus: i
+                    },
+                    success: function (result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.operate.successCallback(result);
+                    }
+                })
+            });
+        }
+        function toArticleEnable(id,infoArticleEnable,i,questionTitle) {
+            table.set();
+            $.modal.confirm("确定" + questionTitle, function () {
+                $.ajax({
+                    url: prefix + "/edit",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        infoArticleEnable: i
+                    },
+                    success: function (result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.operate.successCallback(result);
+                    }
+                })
+            });
+        }
+        function commentList(id,infoTitle) {
+            table.set();
+            if ($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+                var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+                if ($.common.isEmpty(row)) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                var url = table.options.commentUrl.replace("{id}", row[table.options.uniqueId]);
+                open(infoTitle + "的评论", url);
+            } else {
+                open(infoTitle + "的评论", commentListUrl(id));
+            }
+        }
+        function open(title, url, width, height, callback) {
+            // 如果是移动端，就使用自适应大小弹窗
+            if ($.common.isMobile()) {
+                width = 'auto';
+                height = 'auto';
+            }
+            if ($.common.isEmpty(title)) {
+                title = false;
+            }
+            if ($.common.isEmpty(url)) {
+                url = "/404.html";
+            }
+            if ($.common.isEmpty(width)) {
+                width = 800;
+            }
+            if ($.common.isEmpty(height)) {
+                height = ($(window).height() - 50);
+            }
+            if ($.common.isEmpty(callback)) {
+                callback = function(index, layero) {
+                    var iframeWin = layero.find('iframe')[0];
+                    iframeWin.contentWindow.submitHandler(index, layero);
+                }
+            }
+
+            top.layer.open({
+                type: 2,
+                area: [width + 'px', height + 'px'],
+                fix: false,
+                //不固定
+                maxmin: true,
+                shade: 0.3,
+                title: title,
+                content: url,
+                // btn: ['确定', '关闭'],
+                // 弹层外区域关闭
+                shadeClose: true,
+                yes: callback,
+                cancel: function(index) {
+                    return true;
+                }
+            });
+        }
+        function commentListUrl(id) {
+            var url = "/404.html";
+            if ($.common.isNotEmpty(id)) {
+                url = table.options.commentUrl.replace("{id}", id);
+            } else {
+                var id = $.common.isEmpty(table.options.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns(table.options.uniqueId);
+                if (id.length == 0) {
+                    $.modal.alertWarning("请至少选择一条记录");
+                    return;
+                }
+                url = table.options.commentUrl.replace("{id}", id);
+            }
+            return url;
+        }
+    </script>
+</body>
+</html>

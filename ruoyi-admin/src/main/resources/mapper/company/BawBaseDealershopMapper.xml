@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawBaseDealershopMapper">
+
+    <resultMap type="BawBaseDealershop" id="BawBaseDealershopResult">
+        <result property="id"    column="id"    />
+        <result property="dlrCode"    column="dlr_code"    />
+        <result property="kunnr"    column="kunnr"    />
+        <result property="buSort1"    column="bu_sort1"    />
+        <result property="nameOrg1"    column="name_org1"    />
+        <result property="eikto"    column="eikto"    />
+        <result property="lng"    column="lng"    />
+        <result property="lat"    column="lat"    />
+        <result property="isEnable"    column="is_enable"    />
+        <result property="onlineFlag"    column="online_flag"    />
+        <result property="dlrStatus"    column="dlr_status"    />
+        <result property="zdlrType"    column="zdlr_type"    />
+        <result property="orgType"    column="org_type"    />
+        <result property="street"    column="street"    />
+        <result property="postCode1"    column="post_code1"    />
+        <result property="region"    column="region"    />
+        <result property="cityc"    column="cityc"    />
+        <result property="counc"    column="counc"    />
+        <result property="bzirk"    column="bzirk"    />
+        <result property="vkbur"    column="vkbur"    />
+        <result property="adext"    column="adext"    />
+        <result property="mobNumber"    column="mob_number"    />
+        <result property="telNumber"    column="tel_number"    />
+        <result property="smtpAddr"    column="smtp_addr"    />
+        <result property="faxNumber"    column="fax_number"    />
+        <result property="storeCar"    column="store_car"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectBawBaseDealershopVo">
+        select id, dlr_code, kunnr, bu_sort1, name_org1, eikto, lng, lat, is_enable, online_flag, dlr_status, zdlr_type, org_type, street, post_code1, region, cityc, counc, bzirk, vkbur, adext, mob_number, tel_number, smtp_addr, fax_number ,store_car, create_time, create_by, update_time, update_by from baw_base_dealershop
+    </sql>
+
+    <select id="selectBawBaseDealershopList" parameterType="BawBaseDealershop" resultMap="BawBaseDealershopResult">
+        <include refid="selectBawBaseDealershopVo"/>
+        <where>
+            <if test="dlrCode != null  and dlrCode != ''"> and dlr_code = #{dlrCode}</if>
+            <if test="kunnr != null  and kunnr != ''"> and kunnr = #{kunnr}</if>
+            <if test="buSort1 != null  and buSort1 != ''"> and bu_sort1 = #{buSort1}</if>
+            <if test="nameOrg1 != null  and nameOrg1 != ''"> and name_org1 like concat('%', #{nameOrg1}, '%')</if>
+            <if test="eikto != null  and eikto != ''"> and eikto = #{eikto}</if>
+            <if test="lng != null  and lng != ''"> and lng = #{lng}</if>
+            <if test="lat != null  and lat != ''"> and lat = #{lat}</if>
+            <if test="isEnable != null  and isEnable != ''"> and is_enable = #{isEnable}</if>
+            <if test="onlineFlag != null  and onlineFlag != ''"> and online_flag = #{onlineFlag}</if>
+            <if test="dlrStatus != null  and dlrStatus != ''"> and dlr_status = #{dlrStatus}</if>
+            <if test="zdlrType != null  and zdlrType != ''"> and zdlr_type = #{zdlrType}</if>
+            <if test="orgType != null  and orgType != ''"> and org_type = #{orgType}</if>
+            <if test="street != null  and street != ''"> and street like concat('%', #{street}, '%')</if>
+            <if test="postCode1 != null  and postCode1 != ''"> and post_code1 = #{postCode1}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="cityc != null  and cityc != ''"> and cityc = #{cityc}</if>
+            <if test="counc != null  and counc != ''"> and counc = #{counc}</if>
+            <if test="bzirk != null  and bzirk != ''"> and bzirk = #{bzirk}</if>
+            <if test="vkbur != null  and vkbur != ''"> and vkbur = #{vkbur}</if>
+            <if test="adext != null  and adext != ''"> and adext = #{adext}</if>
+            <if test="mobNumber != null  and mobNumber != ''"> and mob_number = #{mobNumber}</if>
+            <if test="telNumber != null  and telNumber != ''"> and tel_number = #{telNumber}</if>
+            <if test="smtpAddr != null  and smtpAddr != ''"> and smtp_addr = #{smtpAddr}</if>
+            <if test="faxNumber != null  and faxNumber != ''"> and fax_number = #{faxNumber}</if>
+            <if test="storeCar != null  and storeCar != ''"> and store_car = #{storeCar}</if>
+
+        </where>
+        ORDER BY IF(ISNULL(lat),0,1) or IF(ISNULL(lng),0,1)
+    </select>
+    <select id="selectBawBaseDealershopListForBAW" parameterType="BawBaseDealershop" resultMap="BawBaseDealershopResult">
+        select id, dlr_code, kunnr, bu_sort1, name_org1, eikto, lng, lat, is_enable, online_flag, dlr_status, zdlr_type, org_type, street, post_code1, region, cityc, counc, bzirk, vkbur, adext, mob_number, tel_number, smtp_addr, fax_number, store_car, create_time, create_by, update_time, update_by from baw_base_dealershop
+        <where>
+            <if test="region != null  and region != ''">  and region = #{region}</if>
+            <if test="cityc != null  and cityc != ''">  and cityc = #{cityc}</if>
+            <if test="isEnable != null "> and is_enable = #{isEnable}</if>
+            <if test="dlrStatus != null "> and dlr_status = #{dlrStatus}</if>
+            <if test="nameOrg1 != null "> and name_org1 like concat('%', #{nameOrg1}, '%')</if>
+            <if test="storeCar != null and storeCar !=''and storeCar !='null' "> and store_car like concat('%', #{storeCar}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="selectBawBaseDealershopById" parameterType="Integer" resultMap="BawBaseDealershopResult">
+        <include refid="selectBawBaseDealershopVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawBaseDealershop" parameterType="BawBaseDealershop" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_base_dealershop
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dlrCode != null">dlr_code,</if>
+            <if test="kunnr != null">kunnr,</if>
+            <if test="buSort1 != null">bu_sort1,</if>
+            <if test="nameOrg1 != null">name_org1,</if>
+            <if test="eikto != null">eikto,</if>
+            <if test="lng != null">lng,</if>
+            <if test="lat != null">lat,</if>
+            <if test="isEnable != null">is_enable,</if>
+            <if test="onlineFlag != null">online_flag,</if>
+            <if test="dlrStatus != null">dlr_status,</if>
+            <if test="zdlrType != null">zdlr_type,</if>
+            <if test="orgType != null">org_type,</if>
+            <if test="street != null">street,</if>
+            <if test="postCode1 != null">post_code1,</if>
+            <if test="region != null">region,</if>
+            <if test="cityc != null">cityc,</if>
+            <if test="counc != null">counc,</if>
+            <if test="bzirk != null">bzirk,</if>
+            <if test="vkbur != null">vkbur,</if>
+            <if test="adext != null">adext,</if>
+            <if test="mobNumber != null">mob_number,</if>
+            <if test="telNumber != null">tel_number,</if>
+            <if test="smtpAddr != null">smtp_addr,</if>
+            <if test="faxNumber != null">fax_number,</if>
+            <if test="storeCar != null">store_car,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dlrCode != null">#{dlrCode},</if>
+            <if test="kunnr != null">#{kunnr},</if>
+            <if test="buSort1 != null">#{buSort1},</if>
+            <if test="nameOrg1 != null">#{nameOrg1},</if>
+            <if test="eikto != null">#{eikto},</if>
+            <if test="lng != null">#{lng},</if>
+            <if test="lat != null">#{lat},</if>
+            <if test="isEnable != null">#{isEnable},</if>
+            <if test="onlineFlag != null">#{onlineFlag},</if>
+            <if test="dlrStatus != null">#{dlrStatus},</if>
+            <if test="zdlrType != null">#{zdlrType},</if>
+            <if test="orgType != null">#{orgType},</if>
+            <if test="street != null">#{street},</if>
+            <if test="postCode1 != null">#{postCode1},</if>
+            <if test="region != null">#{region},</if>
+            <if test="cityc != null">#{cityc},</if>
+            <if test="counc != null">#{counc},</if>
+            <if test="bzirk != null">#{bzirk},</if>
+            <if test="vkbur != null">#{vkbur},</if>
+            <if test="adext != null">#{adext},</if>
+            <if test="mobNumber != null">#{mobNumber},</if>
+            <if test="telNumber != null">#{telNumber},</if>
+            <if test="smtpAddr != null">#{smtpAddr},</if>
+            <if test="faxNumber != null">#{faxNumber},</if>
+            <if test="storeCar != null">#{storeCar},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawBaseDealershop" parameterType="BawBaseDealershop">
+        update baw_base_dealershop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dlrCode != null">dlr_code = #{dlrCode},</if>
+            <if test="kunnr != null">kunnr = #{kunnr},</if>
+            <if test="buSort1 != null">bu_sort1 = #{buSort1},</if>
+            <if test="nameOrg1 != null">name_org1 = #{nameOrg1},</if>
+            <if test="eikto != null">eikto = #{eikto},</if>
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="lat != null">lat = #{lat},</if>
+            <if test="isEnable != null">is_enable = #{isEnable},</if>
+            <if test="onlineFlag != null">online_flag = #{onlineFlag},</if>
+            <if test="dlrStatus != null">dlr_status = #{dlrStatus},</if>
+            <if test="zdlrType != null">zdlr_type = #{zdlrType},</if>
+            <if test="orgType != null">org_type = #{orgType},</if>
+            <if test="street != null">street = #{street},</if>
+            <if test="postCode1 != null">post_code1 = #{postCode1},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="cityc != null">cityc = #{cityc},</if>
+            <if test="counc != null">counc = #{counc},</if>
+            <if test="bzirk != null">bzirk = #{bzirk},</if>
+            <if test="vkbur != null">vkbur = #{vkbur},</if>
+            <if test="adext != null">adext = #{adext},</if>
+            <if test="mobNumber != null">mob_number = #{mobNumber},</if>
+            <if test="telNumber != null">tel_number = #{telNumber},</if>
+            <if test="smtpAddr != null">smtp_addr = #{smtpAddr},</if>
+            <if test="faxNumber != null">fax_number = #{faxNumber},</if>
+            <if test="storeCar != null">store_car = #{storeCar},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawBaseDealershopById" parameterType="Integer">
+        delete from baw_base_dealershop where id = #{id}
+    </delete>
+
+    <delete id="deleteBawBaseDealershopByIds" parameterType="String">
+        delete from baw_base_dealershop where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectBawBaseDealershopByDlrCode" parameterType="BawBaseDealershop" resultMap="BawBaseDealershopResult">
+    select id, dlr_code, kunnr, bu_sort1, name_org1, eikto, lng, lat, is_enable, online_flag, dlr_status, zdlr_type, org_type, street, post_code1, region, cityc, counc, bzirk, vkbur, adext, mob_number, tel_number, smtp_addr, fax_number, store_car, create_time, create_by, update_time, update_by from baw_base_dealershop
+   where dlr_code = #{dlrCode}
+    order by create_time desc
+    </select>
+
+
+    <select id="selectBawBaseDealershopByDlrshopFirst" parameterType="int">
+        select * from baw_base_dealershop order by lng,lat nulls first
+    </select>
+
+    <select id="selectBawBaseDealershopListForBAWCount" resultType="int">
+        select count(*) from baw_base_dealershop
+        <where>
+            <if test="region != null  and region != ''">  and region = #{region}</if>
+            <if test="cityc != null  and cityc != ''">  and cityc = #{cityc}</if>
+            <if test="isEnable != null "> and is_enable = #{isEnable}</if>
+            <if test="dlrStatus != null "> and dlr_status = #{dlrStatus}</if>
+            <if test="nameOrg1 != null "> and name_org1 like concat('%', #{nameOrg1}, '%')</if>
+            <if test="storeCar != null "> and store_car like concat('%', #{storeCar}, '%')</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <update id="updateBawBaseDealershopExcil"  parameterType="BawBaseDealershop">
+        update baw_base_dealershop
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lng != null">lng = #{lng},</if>
+            <if test="lat != null">lat = #{lat},</if>
+        </trim>
+        where name_org1 = #{nameOrg1}
+    </update>
+
+
+    <select id="selectBawBaseDealershopByName" resultType="org.springframework.ui.ModelMap" parameterType="String">
+        SELECT
+                dlr_code AS dictValue,
+                name_org1 AS dictLabel
+        FROM
+                baw_base_dealershop
+    </select>
+
+
+    <select id="selectBawBaseDealershopByCity" resultType="org.springframework.ui.ModelMap">
+        SELECT
+	     dlr_code AS dictvalue,
+	     name_org1 AS dictlable
+        FROM
+	     baw_base_dealershop
+	    where cityc = #{cityc}
+    </select>
+
+    <select id="selectBawBaseDealershop" resultType="org.springframework.ui.ModelMap">
+        SELECT
+	     dlr_code AS dictValue,
+	     name_org1 AS dictLabel
+        FROM
+	     baw_base_dealershop
+    </select>
+</mapper>
+

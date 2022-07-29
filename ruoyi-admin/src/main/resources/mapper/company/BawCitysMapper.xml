@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawCitysMapper">
+
+    <resultMap type="BawCitys" id="BawCitysResult">
+        <result property="id"    column="id"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="provinceCode"    column="province_code"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+        <result property="cityPinYin"    column="city_pin_yin"    />
+    </resultMap>
+
+    <sql id="selectBawCitysVo">
+        select id, province,province_code, city,city_code, county_code,is_disable, is_delete, add_user, add_date, city_pin_yin from baw_citys
+    </sql>
+
+    <select id="selectBawCitysList" parameterType="BawCitys" resultMap="BawCitysResult">
+        <include refid="selectBawCitysVo"/>
+        <where>
+            <if test="province != null  and province != ''"> and province like concat('%', #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and city like concat('%', #{city}, '%')</if>
+            <if test="provinceCode != null "> and province_code = #{provinceCode}</if>
+            <if test="cityCode != null "> and city_code = #{cityCode}</if>
+            <if test="countyCode != null "> and county_code = #{countyCode}</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by province asc,city asc
+    </select>
+
+    <select id="selectProvinceForApi" resultType="org.springframework.ui.ModelMap">
+        select province, province_code,city_code,city
+        from baw_citys
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        group by province
+    </select>
+
+    <select id="selectCityForApi" resultType="org.springframework.ui.ModelMap">
+        select id, province,province_code,city,city_code
+        from baw_citys
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+        </where>
+    </select>
+
+    <select id="selectBawCitysById" parameterType="Integer" resultMap="BawCitysResult">
+        <include refid="selectBawCitysVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawCitys" parameterType="BawCitys" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_citys
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+            <if test="cityPinYin != null">city_pin_yin,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+            <if test="cityPinYin != null">#{cityPinYin},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawCitys" parameterType="BawCitys">
+        update baw_citys
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="city != null and city != ''">city = #{city},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addUser != null">add_user = #{addUser},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+            <if test="cityPinYin != null">city_pin_yin = #{cityPinYin},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawCitysById" parameterType="Integer">
+        update baw_citys set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawCitysByIds" parameterType="String">
+        update baw_citys set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawCitysByIdPhysic" parameterType="Integer">
+        delete from baw_citys where id = #{id}
+    </delete>
+
+    <delete id="deleteBawCitysByIdsPhysic" parameterType="String">
+        delete from baw_citys where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+
+
+    <select id="selectCityByProvinceCodeForApi" resultType="org.springframework.ui.ModelMap">
+        select id, province,province_code,city,city_code
+        from baw_citys
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="provinceCode != null  and province != ''"> and province = #{province}</if>
+        </where>
+    </select>
+
+    <select id="selectBawCityByCode" resultType="java.lang.String" parameterType="java.lang.String">
+        select distinct city
+        from baw_citys
+        where city_code = #{code}
+    </select>
+    <select id="selectBawProvinceByCode" resultType="java.lang.String" parameterType="java.lang.String">
+        select distinct province
+        from baw_citys
+        where province_code = #{code}
+    </select>
+
+    <select id="selectCitys" resultType="org.springframework.ui.ModelMap">
+        select id, province,province_code,city,city_code
+        from baw_citys
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="city != null  and city != ''">
+                and  (city like concat('%', #{city}, '%') or city_pin_yin like concat('%', #{city}, '%'))
+            </if>
+        </where>
+    </select>
+</mapper>

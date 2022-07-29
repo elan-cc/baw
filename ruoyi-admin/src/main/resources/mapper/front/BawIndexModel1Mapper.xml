@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawIndexModel1Mapper">
+    
+    <resultMap type="BawIndexModel1" id="BawIndexModel1Result">
+        <result property="id"    column="id"    />
+        <result property="titleCh"    column="title_ch"    />
+        <result property="titleEn"    column="title_en"    />
+        <result property="pic"    column="pic"    />
+        <result property="link"    column="link"    />
+        <result property="linkTarget"    column="link_target"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawIndexModel1Vo">
+        select id, title_ch, title_en, pic, link, link_target, is_disable, is_delete, add_user, add_date from baw_index_model1
+    </sql>
+
+    <select id="selectBawIndexModel1List" parameterType="BawIndexModel1" resultMap="BawIndexModel1Result">
+        <include refid="selectBawIndexModel1Vo"/>
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+    </select>
+
+    <select id="selectBawIndexModel1ListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, title_ch, title_en, pic, link, link_target
+        from baw_index_model1
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+    </select>
+    
+    <select id="selectBawIndexModel1ById" parameterType="Integer" resultMap="BawIndexModel1Result">
+        <include refid="selectBawIndexModel1Vo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawIndexModel1" parameterType="BawIndexModel1" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_index_model1
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="titleCh != null">title_ch,</if>
+            <if test="titleEn != null">title_en,</if>
+            <if test="pic != null">pic,</if>
+            <if test="link != null">link,</if>
+            <if test="linkTarget != null">link_target,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="titleCh != null">#{titleCh},</if>
+            <if test="titleEn != null">#{titleEn},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="link != null">#{link},</if>
+            <if test="linkTarget != null">#{linkTarget},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawIndexModel1" parameterType="BawIndexModel1">
+        update baw_index_model1
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="titleCh != null">title_ch = #{titleCh},</if>
+            <if test="titleEn != null">title_en = #{titleEn},</if>
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="link != null">link = #{link},</if>
+            <if test="linkTarget != null">link_target = #{linkTarget},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addUser != null">add_user = #{addUser},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawIndexModel1ById" parameterType="Integer">
+        update baw_index_model1 set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawIndexModel1ByIds" parameterType="String">
+        update baw_index_model1 set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawIndexModel1ByIdPhysic" parameterType="Integer">
+        delete from baw_index_model1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawIndexModel1ByIdsPhysic" parameterType="String">
+        delete from baw_index_model1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawActivityCommentWxMapper">
+
+    <resultMap type="BawActivityCommentWx" id="BawActivityCommentWxResult">
+        <result property="id"    column="id"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="name"    column="name"    />
+        <result property="likesCount"    column="likes_count"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="content"    column="content"    />
+        <result property="creatyTime"    column="creaty_time"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="replyCount"    column="reply_count"    />
+    </resultMap>
+
+    <sql id="selectBawActivityCommentWxVo">
+        select id, avatar, name, likes_count, parent_id, content, creaty_time, activity_id, user_id, reply_count from baw_activity_comment_wx
+    </sql>
+
+    <select id="selectBawActivityCommentWxList" parameterType="BawActivityCommentWx" resultMap="BawActivityCommentWxResult">
+        <include refid="selectBawActivityCommentWxVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="activityId != null "> and activity_id = #{activityId}</if>
+        </where>
+    </select>
+
+    <select id="selectBawActivityCommentWxById" parameterType="Integer" resultMap="BawActivityCommentWxResult">
+        <include refid="selectBawActivityCommentWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawActivityCommentWx" parameterType="BawActivityCommentWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_activity_comment_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="avatar != null">avatar,</if>
+            <if test="name != null">name,</if>
+            <if test="likesCount != null">likes_count,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="content != null">content,</if>
+            <if test="creatyTime != null">creaty_time,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="replyCount != null">reply_count,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="avatar != null">#{avatar},</if>
+            <if test="name != null">#{name},</if>
+            <if test="likesCount != null">#{likesCount},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="creatyTime != null">#{creatyTime},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="replyCount != null">#{replyCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawActivityCommentWx" parameterType="BawActivityCommentWx">
+        update baw_activity_comment_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="likesCount != null">likes_count = #{likesCount},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="creatyTime != null">creaty_time = #{creatyTime},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="replyCount != null">reply_count = #{replyCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawActivityCommentWxById" parameterType="Integer">
+        delete from baw_activity_comment_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawActivityCommentWxByIds" parameterType="String">
+        delete from baw_activity_comment_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getActivityComment" resultMap="BawActivityCommentWxResult">
+        <include refid="selectBawActivityCommentWxVo"/>
+        where activity_id = #{activityId} AND parent_id = #{parentId}
+        order by
+        <if test="parentId == 0">
+            likes_count desc,
+        </if>
+        creaty_time desc
+    </select>
+
+    <update id="addReplyCount">
+        UPDATE baw_activity_comment_wx
+        SET reply_count = reply_count + 1
+        WHERE
+            id = #{parentId}
+    </update>
+
+    <update id="commentLike">
+        UPDATE baw_activity_comment_wx
+        SET likes_count = likes_count + 1
+        WHERE
+                id = #{id}
+    </update>
+
+    <update id="cancelCommentLike">
+        UPDATE baw_activity_comment_wx
+        SET likes_count = likes_count - 1
+        WHERE
+                id = #{id}
+    </update>
+
+    <update id="updateReplay" parameterType="int">
+        update baw_activity_comment_wx set reply_count = reply_count -1 where id= #{id}
+    </update>
+</mapper>

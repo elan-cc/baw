@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawProductManualLikeMapper">
+
+    <resultMap type="BawProductManualLike" id="BawProductManualLikeResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="manuaIdl"    column="manua_idl"    />
+        <result property="likesTime"    column="likes_time"    />
+    </resultMap>
+
+    <sql id="selectBawProductManualLikeVo">
+        select id, user_id, manua_idl, likes_time from baw_product_manual_like
+    </sql>
+
+    <select id="selectBawProductManualLikeList" parameterType="BawProductManualLike" resultMap="BawProductManualLikeResult">
+        <include refid="selectBawProductManualLikeVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="manuaIdl != null "> and manua_idl = #{manuaIdl}</if>
+            <if test="likesTime != null "> and likes_time = #{likesTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBawProductManualLikeById" parameterType="Integer" resultMap="BawProductManualLikeResult">
+        <include refid="selectBawProductManualLikeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawProductManualLike" parameterType="BawProductManualLike" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_product_manual_like
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="manuaIdl != null">manua_idl,</if>
+            <if test="likesTime != null">likes_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="manuaIdl != null">#{manuaIdl},</if>
+            <if test="likesTime != null">#{likesTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawProductManualLike" parameterType="BawProductManualLike">
+        update baw_product_manual_like
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="manuaIdl != null">manua_idl = #{manuaIdl},</if>
+            <if test="likesTime != null">likes_time = #{likesTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawProductManualLikeById" parameterType="Integer">
+        delete from baw_product_manual_like where id = #{id}
+    </delete>
+
+    <delete id="deleteBawProductManualLikeByIds" parameterType="String">
+        delete from baw_product_manual_like where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectByIdAndUserId" resultMap="BawProductManualLikeResult">
+        <include refid="selectBawProductManualLikeVo"/>
+        where user_id = #{userId} and manua_idl = #{manuaIdl} limit 1
+    </select>
+</mapper>

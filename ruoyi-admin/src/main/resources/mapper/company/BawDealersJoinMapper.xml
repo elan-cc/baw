@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawDealersJoinMapper">
+    
+    <resultMap type="BawDealersJoin" id="BawDealersJoinResult">
+        <result property="id"    column="id"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawDealersJoinVo">
+        select id, province, city, is_disable, is_delete, add_user, add_date from baw_dealers_join
+    </sql>
+
+    <select id="selectBawDealersJoinList" parameterType="BawDealersJoin" resultMap="BawDealersJoinResult">
+        <include refid="selectBawDealersJoinVo"/>
+        <where>  
+            <if test="province != null  and province != ''"> and province like concat('%', #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and city like concat('%', #{city}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by province asc,city asc
+    </select>
+
+    <select id="selectBawDealersJoinListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, province, city
+        from baw_dealers_join
+        <where>
+            <if test="province != null  and province != ''"> and province like concat('%', #{province}, '%')</if>
+            <if test="city != null  and city != ''"> and city like concat('%', #{city}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="keywords != null  and keywords != ''"> and (province like concat('%', #{keywords}, '%') or city like concat('%', #{keywords}, '%'))</if>
+        </where>
+        order by province asc,city asc
+    </select>
+    
+    <select id="selectBawDealersJoinById" parameterType="Integer" resultMap="BawDealersJoinResult">
+        <include refid="selectBawDealersJoinVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawDealersJoin" parameterType="BawDealersJoin" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_dealers_join
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawDealersJoin" parameterType="BawDealersJoin">
+        update baw_dealers_join
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="city != null and city != ''">city = #{city},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addUser != null">add_user = #{addUser},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawDealersJoinById" parameterType="Integer">
+        update baw_dealers_join set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawDealersJoinByIds" parameterType="String">
+        update baw_dealers_join set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawDealersJoinByIdPhysic" parameterType="Integer">
+        delete from baw_dealers_join where id = #{id}
+    </delete>
+
+    <delete id="deleteBawDealersJoinByIdsPhysic" parameterType="String">
+        delete from baw_dealers_join where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

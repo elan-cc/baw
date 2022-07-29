@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawInformationOfficialLikesWxMapper">
+    
+    <resultMap type="BawInformationOfficialLikesWx" id="BawInformationOfficialLikesWxResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="informationId"    column="information_id"    />
+        <result property="likesTime"    column="likes_time"    />
+    </resultMap>
+
+    <sql id="selectBawInformationOfficialLikesWxVo">
+        select id, user_id, information_id, likes_time from baw_information_official_likes_wx
+    </sql>
+
+    <select id="selectBawInformationOfficialLikesWxList" parameterType="BawInformationOfficialLikesWx" resultMap="BawInformationOfficialLikesWxResult">
+        <include refid="selectBawInformationOfficialLikesWxVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="informationId != null "> and information_id = #{informationId}</if>
+            <if test="likesTime != null "> and likes_time = #{likesTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectBawInformationOfficialLikesWxById" parameterType="Integer" resultMap="BawInformationOfficialLikesWxResult">
+        <include refid="selectBawInformationOfficialLikesWxVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawInformationOfficialLikesWx" parameterType="BawInformationOfficialLikesWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_information_official_likes_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="informationId != null">information_id,</if>
+            <if test="likesTime != null">likes_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="informationId != null">#{informationId},</if>
+            <if test="likesTime != null">#{likesTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawInformationOfficialLikesWx" parameterType="BawInformationOfficialLikesWx">
+        update baw_information_official_likes_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="informationId != null">information_id = #{informationId},</if>
+            <if test="likesTime != null">likes_time = #{likesTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawInformationOfficialLikesWxById" parameterType="Integer">
+        delete from baw_information_official_likes_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawInformationOfficialLikesWxByIds" parameterType="String">
+        delete from baw_information_official_likes_wx where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCountByInfoOfficalIdAndUserId" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            baw_information_official_likes_wx
+        WHERE
+            information_id = #{infoOfficalId}
+          AND user_id = #{userId};
+    </select>
+</mapper>

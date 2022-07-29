@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改活动')" />
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+    <th:block th:include="include :: summernote-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-baw_activity_wx-edit" th:object="${bawActivityWx}">
+            <input name="id" th:field="*{id}" type="hidden">
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label ">省份名称：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" id="province" name="provinceCode" th:with=" type=${@cityDict.getProvinceName()}">
+                        <option th:each="dict : ${type}" th:field="*{provinceCode}" th:text="${dict.province}" th:value="${dict.province_code}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group" id="city1">
+                <label class="col-sm-3 control-label ">城市名称：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" id="city" name="cityCode">
+                        <option  th:field="*{cityCode}" th:text="*{cityName}" th:value="*{cityCode}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" id="region1">
+                <label class="col-sm-3 control-label is-required">经销商：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" id="region" name="dealershopCode">
+                        <option  th:field="*{dealershopCode}" th:text="*{dealershopCode}" th:value="*{dealershopCode}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label is-required">活动标题：</label>
+                <div class="col-sm-8">
+                    <input name="activityTitle" th:field="*{activityTitle}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">缩略图：</label>
+                <div class="col-sm-8">
+                    <input type="hidden" name="thumbnail" th:field="*{thumbnail}">
+                    <div class="file-loading">
+                        <input class="form-control file-upload" id="thumbnail" name="file" type="file" accept=".png,.jpg,.gif,.bpm">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">活动描述：</label>
+                <div class="col-sm-8">
+                    <!--<input type="hidden" name="activityDescribe" th:field="*{activityDescribe}">
+                    <div class="file-loading">
+                        <input class="form-control file-upload" id="activityDescribe" name="file" type="file" accept=".png,.jpg,.gif,.bpm">
+                    </div>-->
+                    <input type="hidden" class="form-control" th:field="*{activityDescribe}">
+                    <div class="summernote" id="activityDescribe"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">开始时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="startTime" th:value="${#dates.format(bawActivityWx.startTime, 'yyyy-MM-dd HH:mm:ss')}" type="text" class="form-control" id="laydate-demo-1" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">结束时间：</label>
+                <div class="col-sm-8">
+                    <div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input name="endTime" th:value="${#dates.format(bawActivityWx.endTime, 'yyyy-MM-dd HH:mm:ss')}" type="text" class="form-control" id="laydate-demo-1" placeholder="yyyy-MM-dd HH:mm:ss" required>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">是否启用：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('my_activity_isable')}">
+                        <input type="radio" th:id="${'isAble_' + dict.dictCode}" name="isAble" th:value="${dict.dictValue}" th:field="*{isAble}">
+                        <label th:for="${'isAble_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">活动类型：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" name="activityType" th:with="type=${@classificationNameDict.getClassificationName()}" >
+                        <option  th:each="dict : ${type}" th:field="*{activityType}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-fileinput-js"/>
+    <th:block th:include="include :: summernote-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "wx/baw_activity_wx";
+        $("#form-baw_activity_wx-edit").validate({
+            focusCleanup: true
+        });
+        $(function() {
+            <!-- datetimepicker示例 -->
+            $("#datetimepicker-demo-1").datetimepicker();
+            layui.use('laydate', function() {
+                var laydate = layui.laydate;
+                laydate.render({
+                    elem: '#laydate-demo-1',
+                    type: 'datetime',
+                    trigger: 'click'
+                });
+            })
+        })
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-baw_activity_wx-edit').serialize());
+            }
+        }
+
+        // $("input[name='startTime']").datetimepicker({
+        //     format: "yyyy-mm-dd hh:ii:ss",
+        //     minView:0,
+        //     autoclose: true,
+        //     initialDate:new Date()
+        // });
+        //
+        // $("input[name='endTime']").datetimepicker({
+        //     format: "yyyy-mm-dd hh:ii:ss",
+        //     minView:0,
+        //     autoclose: true,
+        //     initialDate:new Date()
+        // });
+
+        $(".file-upload").each(function (i) {
+            var val = $("input[name='" + this.id + "']").val()
+            $(this).fileinput({
+                'uploadUrl': ctx + 'common/upload1',
+                initialPreviewAsData: true,
+                initialPreview: [val],
+                maxFileCount: 1,
+                autoReplace: true
+            }).on('fileuploaded', function (event, data, previewId, index) {
+                $("input[name='" + event.currentTarget.id + "']").val(data.response.url)
+            }).on('fileremoved', function (event, id, index) {
+                $("input[name='" + event.currentTarget.id + "']").val('')
+            })
+            $(this).fileinput('_initFileActions');
+        });
+
+
+
+        $("#province").ready(function () {
+            $.ajax({
+                url: prefix + "/getCityName",
+                type: 'GET',
+                data: {
+                    province: $("#province").val(),
+                },
+                success:function (data) {
+                    var cityCode = $("#city").val()
+                    $("#city").empty();
+                    if ($("#province").val() == '0') {
+                        // 全国活动隐藏 城市和经销商
+                        $("#city1").val("-");
+                        $("#region1").val("-");
+                        $("#city1").hide();
+                        $("#region1").hide();
+                    } else if ($("#province").val() != '0'){
+                        // 非全国活动隐藏 城市和经销商
+                        $("#city1").show();
+                        $("#region1").show();
+                    }
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].city_code == cityCode) {
+                            $("#city").append("<option value='" + data[i].city_code + "' selected='selected'>" + data[i].city + "</option>");
+                        } else {
+                            $("#city").append("<option value='" + data[i].city_code + "'>" + data[i].city + "</option>");
+                        }
+                    }
+
+                }
+            })
+            $.ajax({
+                url: prefix + "/getDeakerShopCity",
+                type: 'GET',
+                data: {
+                    city: $("#city").val(),
+                },
+                success:function (data) {
+                    var dealershop= $("#region").val()
+                    $("#region").empty();
+                    for (var i = 0; i < data.length; i++) {
+                        if (data[i].dictvalue == dealershop) {
+                            $("#region").append("<option value='" + data[i].dictvalue + "' selected='selected'>" + data[i].dictlable + "</option>");
+                        } else {
+                            $("#region").append("<option value='" + data[i].dictvalue + "'>" + data[i].dictlable + "</option>");
+                        }
+                    }
+
+                }
+            })
+        });
+
+
+
+
+        $("#province").change(function () {
+            $.ajax({
+                url: prefix + "/getCityName",
+                type: 'GET',
+                data: {
+                    province: $("#province").val(),
+                },
+                success:function (data) {
+                    $("#city").empty();
+                    $("#region").empty();
+                    $("#city").append("<option value=''>请选择城市</option>");
+                    $("#region").append("<option value=''>请先选择城市</option>");
+                     if ($("#province").val() == '0') {
+                         // 全国活动隐藏 城市和经销商
+                         $("#city1").val() == null || undefined;
+                         $("#region1").val() == null || undefined;
+                         $("#city1").hide();
+                         $("#region1").hide();
+                     } else if ($("#province").val() != '0'){
+                        // 非全国活动隐藏 城市和经销商
+                        $("#city1").show();
+                        $("#region1").show();
+                    }
+                    for (var i = 0; i < data.length; i++){
+                        $("#city").append("<option value='" + data[i].city_code + "'>" + data[i].city + "</option>");
+                    }
+                }
+            })
+        });
+
+        $("#city").change(function () {
+            $.ajax({
+                url: prefix + "/getDeakerShopCity",
+                type: 'GET',
+                data: {
+                    city: $("#city").val(),
+                },
+                success:function (data) {
+                    $("#region").empty();
+                    $("#region").append("<option value=''>请选择经销商</option>");
+                    for (var i = 0; i < data.length; i++){
+                        $("#region").append("<option value='" + data[i].dictvalue + "'>" + data[i].dictlable + "</option>");
+                    }
+                }
+            })
+        });
+
+        $(function() {
+            $('.summernote').each(function(i) {
+                $('#' + this.id).summernote({
+                    lang: 'zh-CN',
+                    dialogsInBody: true,
+                    callbacks: {
+                        onChange: function(contents, $edittable) {
+                            $("input[name='" + this.id + "']").val(contents);
+                        },
+                        onImageUpload: function(files) {
+                            var obj = this;
+                            var data = new FormData();
+                            data.append("file", files[0]);
+                            $.ajax({
+                                type: "post",
+                                url: ctx + "common/upload",
+                                data: data,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
+                                dataType: 'json',
+                                success: function(result) {
+                                    if (result.code == web_status.SUCCESS) {
+                                        $('#' + obj.id).summernote('insertImage', result.url);
+                                    } else {
+                                        $.modal.alertError(result.msg);
+                                    }
+                                },
+                                error: function(error) {
+                                    $.modal.alertWarning("图片上传失败。");
+                                }
+                            });
+                        }
+                    }
+                });
+                var content = $("input[name='" + this.id + "']").val();
+                $('#' + this.id).summernote('code', content);
+            })
+        });
+    </script>
+</body>
+</html>

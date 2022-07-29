@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawActivityRegistrationWxMapper">
+
+    <resultMap type="BawActivityRegistrationWx" id="BawActivityRegistrationWxResult">
+        <result property="id"    column="id"    />
+        <result property="email"    column="email"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="cityName"    column="city_name"    />
+        <result property="dealerCode"    column="dealer_code"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="wxName"    column="wx_name"    />
+    </resultMap>
+
+    <sql id="selectBawActivityRegistrationWxVo">
+        select id, email,name , phone, city_code, city_name, dealer_code, remarks, activity_id, user_id from baw_activity_registration_wx
+    </sql>
+
+    <select id="selectBawActivityRegistrationWxList" parameterType="BawActivityRegistrationWx" resultMap="BawActivityRegistrationWxResult">
+        <include refid="selectBawActivityRegistrationWxVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null "> and phone like concat('%', #{phone}, '%')</if>
+            <if test="cityCode != null  and cityCode != ''"> and city_code like concat('%', #{cityCode}, '%')</if>
+            <if test="cityName != null  and cityName != ''"> and city_name like concat('%', #{cityName}, '%')</if>
+            <if test="dealerCode != null "> and dealer_code like concat('%', #{dealerCode}, '%')</if>
+            <if test="activityId != null "> and activity_id like concat('%', #{activityId}, '%')</if>
+            <if test="avatar != null "> and avatar like concat('%', #{avatar}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBawActivityRegistrationWxById" parameterType="Integer" resultMap="BawActivityRegistrationWxResult">
+        <include refid="selectBawActivityRegistrationWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawActivityRegistrationWx" parameterType="BawActivityRegistrationWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_activity_registration_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null">email,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="cityCode != null">city_code,</if>
+            <if test="cityName != null">city_name,</if>
+            <if test="dealerCode != null">dealer_code,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="wxName != null">wx_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="email != null">#{email},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="cityName != null">#{cityName},</if>
+            <if test="dealerCode != null">#{dealerCode},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="wxName != null">#{wxName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawActivityRegistrationWx" parameterType="BawActivityRegistrationWx">
+        update baw_activity_registration_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="email != null">email = #{email},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="cityCode != null">city_code = #{cityCode},</if>
+            <if test="cityName != null">city_name = #{cityName},</if>
+            <if test="dealerCode != null">dealer_code = #{dealerCode},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="wxName != null">wx_name = #{wxName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawActivityRegistrationWxById" parameterType="Integer">
+        delete from baw_activity_registration_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawActivityRegistrationWxByIds" parameterType="String">
+        delete from baw_activity_registration_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectListByActivityIdAndCount" resultMap="BawActivityRegistrationWxResult">
+        SELECT
+            avatar
+        FROM
+            baw_activity_registration_wx
+        WHERE
+            activity_id = #{activityId}
+        LIMIT #{count}
+    </select>
+
+    <select id="selectCountByActivityId" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            baw_activity_registration_wx
+        WHERE
+            activity_id = #{activityId}
+    </select>
+
+    <select id="selectByPhone" resultMap="BawActivityRegistrationWxResult">
+        <include refid="selectBawActivityRegistrationWxVo"/>
+        where activity_id = #{activityId} and phone = #{phone}
+    </select>
+</mapper>

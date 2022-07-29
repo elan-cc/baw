@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawInformationOfficialWxMapper">
+
+    <resultMap type="BawInformationOfficialWx" id="BawInformationOfficialWxResult">
+        <result property="id"    column="id"    />
+        <result property="infoTitle"    column="info_title"    />
+        <result property="infoPicture"    column="info_picture"    />
+        <result property="infoDescribe"    column="info_describe"    />
+        <result property="infoContent"    column="info_content"    />
+        <result property="infoReleaseTime"    column="info_release_time"    />
+        <result property="infoFocus"    column="info_focus"    />
+        <result property="infoArticleEnable"    column="info_article_enable"    />
+        <result property="infoCommentEnable"    column="info_comment_enable"    />
+        <result property="infoSource"    column="info_source"    />
+        <result property="infoViewsCount"    column="info_views_count"    />
+        <result property="infoLikesNumber"    column="info_likes_number"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="infoIsDelete"    column="info_is_delete"    />
+        <result property="type"    column="type"    />
+        <result property="shareCount"    column="share_count"    />
+    </resultMap>
+
+    <sql id="selectBawInformationOfficialWxVo">
+        select id, info_title, info_picture, info_describe, info_content, info_release_time, info_focus, info_article_enable, info_comment_enable, info_source,info_is_delete, info_views_count,info_likes_number, create_time, create_by, update_time, update_by,type,share_count from baw_information_official_wx
+    </sql>
+
+    <select id="selectBawInformationOfficialWxList" parameterType="BawInformationOfficialWx" resultMap="BawInformationOfficialWxResult">
+        <include refid="selectBawInformationOfficialWxVo"/>
+        <where>
+            <if test="infoTitle != null  and infoTitle != ''"> and info_title like concat('%', #{infoTitle}, '%')</if>
+            <if test="infoFocus != null "> and info_focus = #{infoFocus}</if>
+            <if test="infoArticleEnable != null "> and info_article_enable = #{infoArticleEnable}</if>
+            <if test="infoIsDelete != null "> and info_is_delete = #{infoIsDelete}</if>
+            <if test="type != null "> and type = #{type}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectBawInformationOfficialWxById" parameterType="Integer" resultMap="BawInformationOfficialWxResult">
+        <include refid="selectBawInformationOfficialWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawInformationOfficialWx" parameterType="BawInformationOfficialWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_information_official_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="infoTitle != null">info_title,</if>
+            <if test="infoPicture != null">info_picture,</if>
+            <if test="infoDescribe != null">info_describe,</if>
+            <if test="infoContent != null">info_content,</if>
+            <if test="infoReleaseTime != null">info_release_time,</if>
+            <if test="infoFocus != null">info_focus,</if>
+            <if test="infoArticleEnable != null">info_article_enable,</if>
+            <if test="infoCommentEnable != null">info_comment_enable,</if>
+            <if test="infoSource != null">info_source,</if>
+            <if test="infoIsDelete != null">info_is_delete,</if>
+            <if test="infoViewsCount != null">info_views_count,</if>
+            <if test="infoLikesNumber != null">info_likes_number,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="type != null">type,</if>
+            <if test="shareCount != null">share_count,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="infoTitle != null">#{infoTitle},</if>
+            <if test="infoPicture != null">#{infoPicture},</if>
+            <if test="infoDescribe != null">#{infoDescribe},</if>
+            <if test="infoContent != null">#{infoContent},</if>
+            <if test="infoReleaseTime != null">#{infoReleaseTime},</if>
+            <if test="infoFocus != null">#{infoFocus},</if>
+            <if test="infoArticleEnable != null">#{infoArticleEnable},</if>
+            <if test="infoCommentEnable != null">#{infoCommentEnable},</if>
+            <if test="infoSource != null">#{infoSource},</if>
+            <if test="infoIsDelete != null">#{infoIsDelete},</if>
+            <if test="infoViewsCount != null">#{infoViewsCount},</if>
+            <if test="infoLikesNumber != null">#{infoLikesNumber},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="type != null">#{type},</if>
+            <if test="shareCount != null">#{shareCount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawInformationOfficialWx" parameterType="BawInformationOfficialWx">
+        update baw_information_official_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="infoTitle != null">info_title = #{infoTitle},</if>
+            <if test="infoPicture != null">info_picture = #{infoPicture},</if>
+            <if test="infoDescribe != null">info_describe = #{infoDescribe},</if>
+            <if test="infoContent != null">info_content = #{infoContent},</if>
+            <if test="infoReleaseTime != null">info_release_time = #{infoReleaseTime},</if>
+            <if test="infoFocus != null">info_focus = #{infoFocus},</if>
+            <if test="infoArticleEnable != null">info_article_enable = #{infoArticleEnable},</if>
+            <if test="infoCommentEnable != null">info_comment_enable = #{infoCommentEnable},</if>
+            <if test="infoSource != null">info_source = #{infoSource},</if>
+            <if test="infoIsDelete != null">info_is_delete = #{infoIsDelete},</if>
+            <if test="infoViewsCount != null">info_views_count = #{infoViewsCount},</if>
+            <if test="infoLikesNumber != null">info_likes_number = #{infoLikesNumber},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="shareCount != null">share_count #{shareCount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+<!--    <delete id="deleteBawInformationOfficialWxById" parameterType="Integer">-->
+<!--        delete from baw_information_official_wx where id = #{id}-->
+<!--    </delete>-->
+    <update id="deleteBawInformationOfficialWxById" parameterType="Integer">
+        update baw_information_official_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="infoIsDelete != null">info_is_delete = 1,</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteBawInformationOfficialWxByIds" parameterType="String">
+        delete from baw_information_official_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectBawInformationOfficialWxFocusCount" resultType="int">
+        select count(id) from baw_information_official_wx where info_focus =2
+    </select>
+
+    <select id="selectById" resultMap="BawInformationOfficialWxResult">
+        <include refid="selectBawInformationOfficialWxVo"/>
+        where id = #{id}
+        and info_is_delete = 0
+    </select>
+
+    <update id="addViewCount">
+        UPDATE baw_information_official_wx
+        SET info_views_count = info_views_count + 1
+        WHERE
+            id = #{infoOfficalId}
+    </update>
+
+    <select id="getInfoOfficialList" resultMap="BawInformationOfficialWxResult">
+        <include refid="selectBawInformationOfficialWxVo"/>
+        where
+        info_is_delete = 0
+        and info_article_enable = 1
+        and info_focus =#{focus}
+        and type =#{type}
+        order by create_time desc
+    </select>
+
+    <update id="cancelInformationOfficialList" >
+        UPDATE baw_information_official_wx
+        SET info_likes_number = info_likes_number - 1
+        WHERE
+            id = #{infoOfficalId}
+    </update>
+    <delete id="informationOfficialList">
+        UPDATE baw_information_official_wx
+        SET info_likes_number = info_likes_number + 1
+        WHERE
+            id = #{infoOfficalId}
+    </delete>
+
+    <update id="share">
+        UPDATE baw_information_official_wx
+        SET share_count = share_count + 1
+        WHERE
+                id = #{infoOfficalId}
+    </update>
+</mapper>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增车型配置参数')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content" id="outerLayer">
+    <form class="form-horizontal m" id="form-baw_base_car_config_param_edit-add" th:object="${bawBaseCarConfigParam}">
+
+        <input name="carConfigCode"  th:field="*{carConfigCode}" type="hidden">
+        <input name="carSeriesCode"  th:field="*{carSeriesCode}" type="hidden">
+        <input name="carTypeCode"  th:field="*{carTypeCode}" type="hidden">
+         <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车型分类：</label>
+            <div class="col-sm-4">
+                <select class="form-control m-b"  name="configGroupId" th:with=" type=${@ConfigGroupName.getConfigGroupName()}">
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" required></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5 control-label ">配置名称：</label>
+            <div class="col-sm-4">
+                <input name="paramName"  class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5 control-label ">配置信息：</label>
+            <div class="col-sm-4">
+                <input name="paramValue"  class="form-control" type="text" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5 control-label ">排序：</label>
+            <div class="col-sm-4">
+                <input name="orderNum"  class="form-control" type="text" required>
+            </div>
+        </div>
+    </form>
+
+</div>
+<th:block th:include="include :: footer"/>
+<script>
+    // var code = [[${bawBaseCarConfigParam.carConfigCode}]]
+    var prefix = ctx + "wx/baw_base_car_config_param"
+    $("#form-baw_base_car_config_param_edit-add").validate({
+        focusCleanup: true
+    });
+
+    //URL调用后台接口处
+    function submitHandler() {
+        if ($.validate.form()) {
+            save(prefix + "/add", $('#form-baw_base_car_config_param_edit-add').serialize());
+            // $.operate.save(prefix + "/add", $('#form-baw_base_car_config_param_edit-add').serialize());
+        }
+    }
+
+    function save(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍候...");
+                $.modal.disable();
+            },
+            success: function(result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                if (result.code === 500){
+                    $.modal.alertWarning(result.msg)
+                    $.modal.close();
+                } else {
+                    $.modal.close();
+                }
+                // successCallback(result);
+            },
+        };
+        $.ajax(config)
+    }
+
+</script>
+</body>
+</html>

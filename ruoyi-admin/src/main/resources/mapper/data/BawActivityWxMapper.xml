@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawActivityWxMapper">
+
+    <resultMap type="BawActivityWx" id="BawActivityWxResult">
+        <result property="id"    column="id"    />
+        <result property="provinceCode"    column="province_code"    />
+        <result property="provinceName"    column="province_name"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="cityName"    column="city_name"    />
+        <result property="activityTitle"    column="activity_title"    />
+        <result property="activityDescribe"    column="activity_describe"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="isAble"    column="is_able"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="activityType"    column="activity_type"    />
+        <result property="dealershopCode"    column="dealershop_code"    />
+        <result property="viewsCount"    column="views_count"    />
+        <result property="likesCount"    column="likes_count"    />
+        <result property="thumbnail"    column="thumbnail"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="contentCount"    column="content_count"    />
+        <result property="activityState"    column="activity_state"    />
+    </resultMap>
+
+    <sql id="selectBawActivityWxVo">
+        select id, province_code, province_name,city_code, city_name, activity_title, activity_describe, create_time, start_time, end_time, is_able, activity_type, views_count, likes_count, thumbnail, create_by, update_by, update_time, content_count,dealershop_code,
+        CASE
+        WHEN start_time <![CDATA[>]]> NOW() THEN '0'
+        WHEN start_time  <![CDATA[<]]>  NOW() and end_time > NOW()  THEN '1'
+        WHEN end_time  <![CDATA[<]]>  NOW()  THEN '2'
+        END as activity_state
+        from baw_activity_wx
+    </sql>
+
+    <select id="selectBawActivityWxList" parameterType="BawActivityWx" resultMap="BawActivityWxResult">
+        <include refid="selectBawActivityWxVo"/>
+        <where>
+            <if test="provinceName != null  and provinceName != ''"> and province_name like concat('%', #{provinceName}, '%')</if>
+            <if test="provinceCode != null  and provinceCode != ''"> and province_code =#{provinceCode}</if>
+            <if test="cityName != null  and cityName != ''"> and city_name like concat('%', #{cityName}, '%')</if>
+            <if test="cityCode != null  and cityCode != ''"> and city_code =#{cityCode}</if>
+            <if test="dealershopCode != null  and dealershopCode != ''"> and dealershop_code =#{dealershopCode}</if>
+            <if test="activityTitle != null  and activityTitle != ''"> and activity_title like concat('%', #{activityTitle}, '%')</if>
+            <if test="isAble != null "> and is_able = #{isAble}</if>
+            <if test="activityType != null "> and activity_type = #{activityType}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+        </where>
+    </select>
+
+    <select id="selectBawActivityWxById" parameterType="Integer" resultMap="BawActivityWxResult">
+        <include refid="selectBawActivityWxVo"/>
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <insert id="insertBawActivityWx" parameterType="BawActivityWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_activity_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="provinceCode != null and provinceCode != ''">province_code,</if>
+            <if test="provinceName != null">province_name,</if>
+            <if test="cityCode != null and cityCode != ''">city_code,</if>
+            <if test="cityName != null">city_name,</if>
+            <if test="activityTitle != null and activityTitle != ''">activity_title,</if>
+            <if test="activityDescribe != null">activity_describe,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="isAble != null">is_able,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="activityType != null">activity_type,</if>
+            <if test="viewsCount != null">views_count,</if>
+            <if test="likesCount != null">likes_count,</if>
+            <if test="thumbnail != null">thumbnail,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="contentCount != null">content_count,</if>
+            <if test="dealershopCode != null">dealershop_code,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="provinceCode != null and provinceCode != ''">#{provinceCode},</if>
+            <if test="provinceName != null">#{provinceName},</if>
+            <if test="cityCode != null and cityCode != ''">#{cityCode},</if>
+            <if test="cityName != null">#{cityName},</if>
+            <if test="activityTitle != null and activityTitle != ''">#{activityTitle},</if>
+            <if test="activityDescribe != null">#{activityDescribe},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="isAble != null">#{isAble},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="activityType != null">#{activityType},</if>
+            <if test="viewsCount != null">#{viewsCount},</if>
+            <if test="likesCount != null">#{likesCount},</if>
+            <if test="thumbnail != null">#{thumbnail},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="contentCount != null">#{contentCount},</if>
+            <if test="dealershopCode != null">#{dealershopCode},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawActivityWx" parameterType="BawActivityWx">
+        update baw_activity_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="provinceCode != null and provinceCode != ''">province_code = #{provinceCode},</if>
+            <if test="provinceName != null">province_name = #{provinceName},</if>
+            <if test="cityCode != null and cityCode != ''">city_code = #{cityCode},</if>
+            <if test="cityName != null">city_name = #{cityName},</if>
+            <if test="activityTitle != null and activityTitle != ''">activity_title = #{activityTitle},</if>
+            <if test="activityDescribe != null">activity_describe = #{activityDescribe},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="isAble != null">is_able = #{isAble},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="activityType != null">activity_type = #{activityType},</if>
+            <if test="viewsCount != null">views_count = #{viewsCount},</if>
+            <if test="likesCount != null">likes_count = #{likesCount},</if>
+            <if test="thumbnail != null">thumbnail = #{thumbnail},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="contentCount != null">content_count = #{contentCount},</if>
+            <if test="dealershopCode != null">dealershop_code = #{dealershopCode},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="deleteBawActivityWxById" parameterType="Integer">
+<!--        delete from baw_activity_wx where id = #{id}-->
+        update  baw_activity_wx
+        <trim prefix="SET" suffixOverrides=",">
+                is_deleted = 1
+        </trim>
+                where id = #{id}
+    </update>
+
+    <update id="deleteBawActivityWxByIds" parameterType="String">
+        update baw_activity_wx
+        <trim prefix="SET" suffixOverrides=",">
+            is_deleted = 1
+        </trim>
+        where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <select id="getActivityList" resultMap="BawActivityWxResult">
+        select id, province_code, province_name,city_code, city_name, activity_title, activity_describe, create_time, start_time, end_time, is_able, activity_type, views_count, likes_count, thumbnail, create_by, update_by, update_time, content_count,dealershop_code,
+        CASE
+            WHEN start_time &gt; NOW() THEN '0'
+            WHEN start_time &lt; NOW() and end_time > NOW()  THEN '1'
+            WHEN end_time &lt; NOW()	THEN '2'
+            END as activity_state
+        from baw_activity_wx
+				where  (city_code = #{cityCode} OR province_code = 0)
+          and is_able = 1 and is_deleted = 0
+          				and activity_type = #{activityType}
+				ORDER BY create_time DESC
+    </select>
+
+    <update id="addViewCount">
+        UPDATE baw_activity_wx
+        SET views_count = views_count + 1
+        WHERE
+            id = #{activityId}
+    </update>
+
+    <update id="addContentCount">
+        UPDATE baw_activity_wx
+        SET content_count = content_count + 1
+        WHERE
+            id = #{activityId}
+    </update>
+
+    <update id="cancelActivityList">
+        UPDATE baw_activity_wx
+        SET likes_count = likes_count - 1
+        WHERE
+                id = #{activityId}
+		</update>
+
+    <delete id="activityList">
+        UPDATE baw_activity_wx
+        SET likes_count = likes_count + 1
+        WHERE
+                id = #{activityId}
+    </delete>
+
+    <select id="selectBawActivityWxByName" resultType="org.springframework.ui.ModelMap" parameterType="String">
+        SELECT
+                id AS dictValue,
+                activity_title AS dictLabel
+        FROM
+                baw_activity_wx
+        WHERE
+                id IN ( SELECT activity_id FROM ${tableName} )
+        ORDER BY
+                activity_title ASC
+    </select>
+
+
+    <select id="selectById" resultMap="BawActivityWxResult">
+        select id, province_code, province_name,city_code, city_name, activity_title, activity_describe, create_time, start_time, end_time, is_able, activity_type, views_count, likes_count, thumbnail, create_by, update_by, update_time, content_count,dealershop_code,
+        CASE
+           WHEN start_time &gt; NOW() THEN '0'
+           WHEN start_time &lt; NOW() and end_time > NOW()  THEN '1'
+           WHEN end_time &lt; NOW()	THEN '2'
+           END as activity_state
+        from baw_activity_wx
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="myActivity" resultMap="BawActivityWxResult">
+        select id, province_code, province_name,city_code, city_name, activity_title, activity_describe, create_time, start_time, end_time, is_able, activity_type, views_count, likes_count, thumbnail, create_by, update_by, update_time, content_count,dealershop_code
+        FROM
+            baw_activity_wx
+        WHERE
+            id IN (
+                SELECT
+                    activity_id
+                FROM
+                    baw_activity_registration_wx
+                WHERE
+                    user_id = #{userId})
+        <if test=" 1 == activityState"> <!-- 进行中 -->
+            AND start_time <![CDATA[<]]> NOW() AND end_time <![CDATA[>]]> NOW()
+        </if>
+        <if test=" 2 == activityState"> <!-- 已结束 -->
+            AND end_time <![CDATA[<]]> NOW()
+        </if>
+    </select>
+</mapper>

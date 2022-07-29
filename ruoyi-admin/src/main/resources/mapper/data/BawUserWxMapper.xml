@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawUserWxMapper">
+
+    <resultMap type="BawUserWx" id="BawUserWxResult">
+        <result property="id"    column="id"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="userName"    column="user_name"    />
+        <result property="gender"    column="gender"    />
+        <result property="password"    column="password"    />
+        <result property="salt"    column="salt"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="email"    column="email"    />
+        <result property="regIp"    column="reg_ip"    />
+        <result property="regTime"    column="reg_time"    />
+        <result property="clientVer"    column="client_ver"    />
+        <result property="status"    column="status"    />
+        <result property="deleted"    column="deleted"    />
+        <result property="wxOpenid"    column="wx_openid"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="token"    column="token"    />
+    </resultMap>
+
+    <sql id="selectBawUserWxVo">
+        select id, nick_name, avatar, user_name, gender, password, salt, phone_number, email, reg_ip, reg_time, client_ver, status, deleted, wx_openid, token, create_time, update_time, remark from baw_user_wx
+    </sql>
+
+    <select id="selectBawUserWxList" parameterType="BawUserWx" resultMap="BawUserWxResult">
+        <include refid="selectBawUserWxVo"/>
+        <where>
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="salt != null  and salt != ''"> and salt = #{salt}</if>
+            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number = #{phoneNumber}</if>
+            <if test="email != null  and email != ''"> and email = #{email}</if>
+            <if test="regIp != null  and regIp != ''"> and reg_ip = #{regIp}</if>
+            <if test="regTime != null "> and reg_time = #{regTime}</if>
+            <if test="clientVer != null  and clientVer != ''"> and client_ver = #{clientVer}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="deleted != null "> and deleted = #{deleted}</if>
+            <if test="wxOpenid != null  and wxOpenid != ''"> and wx_openid = #{wxOpenid}</if>
+            <if test="token != null  and token != ''"> and token = #{token}</if>
+        </where>
+    </select>
+
+    <select id="selectBawUserWxById" parameterType="Integer" resultMap="BawUserWxResult">
+        <include refid="selectBawUserWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawUserWx" parameterType="BawUserWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_user_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">nick_name,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="userName != null and userName != ''">user_name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="password != null">password,</if>
+            <if test="salt != null">salt,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="email != null">email,</if>
+            <if test="regIp != null">reg_ip,</if>
+            <if test="regTime != null">reg_time,</if>
+            <if test="clientVer != null">client_ver,</if>
+            <if test="status != null">status,</if>
+            <if test="deleted != null">deleted,</if>
+            <if test="wxOpenid != null">wx_openid,</if>
+            <if test="token != null">token,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nickName != null">#{nickName},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="userName != null and userName != ''">#{userName},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="password != null">#{password},</if>
+            <if test="salt != null">#{salt},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="email != null">#{email},</if>
+            <if test="regIp != null">#{regIp},</if>
+            <if test="regTime != null">#{regTime},</if>
+            <if test="clientVer != null">#{clientVer},</if>
+            <if test="status != null">#{status},</if>
+            <if test="deleted != null">#{deleted},</if>
+            <if test="wxOpenid != null">#{wxOpenid},</if>
+            <if test="token != null">#{token},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawUserWx" parameterType="BawUserWx">
+        update baw_user_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="userName != null and userName != ''">user_name = #{userName},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="salt != null">salt = #{salt},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="regIp != null">reg_ip = #{regIp},</if>
+            <if test="regTime != null">reg_time = #{regTime},</if>
+            <if test="clientVer != null">client_ver = #{clientVer},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="deleted != null">deleted = #{deleted},</if>
+            <if test="wxOpenid != null">wx_openid = #{wxOpenid},</if>
+            <if test="token != null">wx_openid = #{token},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="saveUserInfo" parameterType="BawUserWx">
+        update baw_user_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userName != null and userName != '' ">nick_name = #{userName},</if>
+            <if test="avatar != null and avatar != '' ">avatar = #{avatar},</if>
+            <if test="userName != null and userName != '' ">user_name = #{userName},</if>
+            <if test="phoneNumber != null and phoneNumber != '' ">phone_number = #{phoneNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawUserWxById" parameterType="Integer">
+        delete from baw_user_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawUserWxByIds" parameterType="String">
+        delete from baw_user_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="queryByOpenId" parameterType="java.lang.String" resultMap="BawUserWxResult">
+        <include refid="selectBawUserWxVo"/> where wx_openid = #{openId} limit 1
+    </select>
+
+    <select id="selectByToken" resultMap="BawUserWxResult">
+        select id, nick_name, user_name, avatar,  gender, phone_number, email, reg_time, wx_openid from baw_user_wx
+        where token = #{token} limit 1
+		</select>
+</mapper>

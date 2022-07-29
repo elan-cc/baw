@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawHelpCenterWxMapper">
+
+    <resultMap type="BawHelpCenterWx" id="BawHelpCenterWxResult">
+        <result property="id"    column="id"    />
+        <result property="questionType"    column="question_type"    />
+        <result property="typeDescription"    column="type_description"    />
+        <result property="questionTitle"    column="question_title"    />
+        <result property="questionContent"    column="question_content"    />
+        <result property="questionSolving"    column="question_solving"    />
+        <result property="isHot"    column="is_hot"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBawHelpCenterWxVo">
+        select id, question_type, type_description, question_title, question_content, question_solving, is_hot, create_by, create_time, update_by, update_time from baw_help_center_wx
+    </sql>
+
+    <select id="selectBawHelpCenterWxList" parameterType="BawHelpCenterWx" resultMap="BawHelpCenterWxResult">
+        <include refid="selectBawHelpCenterWxVo"/>
+        <where>
+            <if test="questionType != null "> and question_type = #{questionType}</if>
+            <if test="questionTitle != null  and questionTitle != ''"> and question_title like concat('%', #{questionTitle}, '%')</if>
+            <if test="isHot != null  and isHot != ''"> and is_hot = #{isHot}</if>
+        </where>
+    </select>
+
+    <select id="selectBawHelpCenterWxById" parameterType="Integer" resultMap="BawHelpCenterWxResult">
+        <include refid="selectBawHelpCenterWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawHelpCenterWx" parameterType="BawHelpCenterWx">
+        insert into baw_help_center_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="questionType != null">question_type,</if>
+            <if test="typeDescription != null">type_description,</if>
+            <if test="questionTitle != null">question_title,</if>
+            <if test="questionContent != null">question_content,</if>
+            <if test="questionSolving != null">question_solving,</if>
+            <if test="isHot != null">is_hot,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="questionType != null">#{questionType},</if>
+            <if test="typeDescription != null">#{typeDescription},</if>
+            <if test="questionTitle != null">#{questionTitle},</if>
+            <if test="questionContent != null">#{questionContent},</if>
+            <if test="questionSolving != null">#{questionSolving},</if>
+            <if test="isHot != null">#{isHot},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawHelpCenterWx" parameterType="BawHelpCenterWx">
+        update baw_help_center_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="questionType != null">question_type = #{questionType},</if>
+            <if test="typeDescription != null">type_description = #{typeDescription},</if>
+            <if test="questionTitle != null">question_title = #{questionTitle},</if>
+            <if test="questionContent != null">question_content = #{questionContent},</if>
+            <if test="questionSolving != null">question_solving = #{questionSolving},</if>
+            <if test="isHot != null">is_hot = #{isHot},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawHelpCenterWxById" parameterType="Integer">
+        delete from baw_help_center_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawHelpCenterWxByIds" parameterType="String">
+        delete from baw_help_center_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+		<select id="queryHelpCenterList" resultType="org.springframework.ui.ModelMap">
+        SELECT id, question_title as questionTitle FROM baw_help_center_wx
+        <where>
+            <if test="questionType != null "> and question_type = #{questionType}</if>
+            <if test="isHot != null  and isHot != ''"> and is_hot = #{isHot}</if>
+        </where>
+		</select>
+</mapper>

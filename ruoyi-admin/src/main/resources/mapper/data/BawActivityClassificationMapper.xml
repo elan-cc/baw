@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawActivityClassificationMapper">
+
+    <resultMap type="BawActivityClassification" id="BawActivityClassificationResult">
+        <result property="id"    column="id"    />
+        <result property="classificationName"    column="classification_name"    />
+        <result property="cearteTime"    column="cearte_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="orderNum"    column="order_num"    />
+    </resultMap>
+
+    <sql id="selectBawActivityClassificationVo">
+        select id, classification_name, cearte_time, create_by, update_time, update_by,order_num from baw_activity_classification
+    </sql>
+
+    <select id="selectBawActivityClassificationList" parameterType="BawActivityClassification" resultMap="BawActivityClassificationResult">
+        <include refid="selectBawActivityClassificationVo"/>
+        <where>
+            <if test="classificationName != null  and classificationName != ''"> and classification_name like concat('%', #{classificationName}, '%')</if>
+            <if test="cearteTime != null "> and cearte_time = #{cearteTime}</if>
+            <if test="craeteBy != null  and craeteBy != ''"> and create_by = #{createBy}</if>
+            <if test="orderNum != null  and orderNum != ''"> and order_num = #{orderNum}</if>
+        </where>
+        order by  order_num
+
+    </select>
+
+    <select id="selectBawActivityClassificationById" parameterType="Integer" resultMap="BawActivityClassificationResult">
+        <include refid="selectBawActivityClassificationVo"/>
+        where id = #{id}
+        order by  order_num
+
+    </select>
+
+    <insert id="insertBawActivityClassification" parameterType="BawActivityClassification">
+        insert into baw_activity_classification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="classificationName != null">classification_name,</if>
+            <if test="cearteTime != null">cearte_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="orderNum != null">order_num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="classificationName != null">#{classificationName},</if>
+            <if test="cearteTime != null">#{cearteTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawActivityClassification" parameterType="BawActivityClassification">
+        update baw_activity_classification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="classificationName != null">classification_name = #{classificationName},</if>
+            <if test="cearteTime != null">cearte_time = #{cearteTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="orderNum != null">order_num = #{orderNum},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawActivityClassificationById" parameterType="Integer">
+        delete from baw_activity_classification where id = #{id}
+    </delete>
+
+    <delete id="deleteBawActivityClassificationByIds" parameterType="String">
+        delete from baw_activity_classification where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectBawActivityClassificationByName" resultType="org.springframework.ui.ModelMap" parameterType="String">
+        SELECT
+                id AS dictValue,
+                classification_name AS dictLabel
+        FROM
+                baw_activity_classification
+    </select>
+
+
+
+    <select id="classIficartionList" resultType="org.springframework.ui.ModelMap">
+        SELECT id, classification_name FROM baw_activity_classification order by order_num
+    </select>
+</mapper>

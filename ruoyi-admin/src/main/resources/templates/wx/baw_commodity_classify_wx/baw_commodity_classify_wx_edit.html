@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('商品分类列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            <label>商品名称：</label>
+                            <input type="text" name="name"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="add()" shiro:hasPermission="wx:baw_commodity_classify_wx:add">
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary single disabled" onclick="$.operate.edit()"
+               shiro:hasPermission="wx:baw_commodity_classify_wx:edit">
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()"
+               shiro:hasPermission="wx:baw_commodity_classify_wx:remove">
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()"
+               shiro:hasPermission="wx:baw_commodity_classify_wx:export">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table1"></table>
+        </div>
+    </div>
+</div>
+<th:block th:include="include :: footer"/>
+<th:block th:include="include :: bootstrap-table-editable-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('wx:baw_commodity_classify_wx:edit1')}]];
+    var parentid = [[${bawCommodityClassifyWx.id}]];
+    var query = [[${table}]]; //$.table.queryParams;
+    var removeFlag = [[${@permission.hasPermi('wx:baw_commodity_classify_wx:remove')}]];
+    var classifyName = [[${@classifyByName.getClassifyByName()}]];
+    var prefix = ctx + "wx/baw_commodity_classify_wx";
+    var param = $(function () {
+        var options = {
+            // url: prefix + "/list",
+            url: prefix + "/edit1/" + parentid,
+            createUrl: prefix + "/add1/" + parentid,
+            updateUrl: prefix + "/edit2/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "商品分类",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'name',
+                    title: '商品名称'
+                },
+                {
+                    field: 'parentId',
+                    title: '分类',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(classifyName, value);
+                    }
+                },
+                {
+                    field: 'commodityCount',
+                    title: '商品数量'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        inits(options);
+    });
+
+    $("#form-baw_commodity_classify_wx_edit").validate({
+        focusCleanup: true
+    });
+
+    function add(id) {
+        console.log(table.options.modalName)
+        table.set();
+        open("添加" + table.options.modalName, $.operate.addUrl(id));
+    }
+
+    function inits(optionss) {
+        var defaults = {
+            id: "bootstrap-table1",
+            type: 0, // 0 代表bootstrapTable 1代表bootstrapTreeTable
+            method: 'post',
+            height: undefined,
+            sidePagination: "server",
+            sortName: undefined,
+            sortOrder: "asc",
+            pagination: true,
+            paginationLoop: false,
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10, 25, 50],
+            toolbar: "toolbar",
+            loadingFontSize: 13,
+            parentid:parentid,
+            striped: false,
+            escape: false,
+            firstLoad: true,
+            showFooter: false,
+            search: false,
+            showSearch: true,
+            showPageGo: false,
+            showRefresh: true,
+            showColumns: true,
+            showToggle: true,
+            showExport: false,
+            showPrint: false,
+            exportDataType: 'all',
+            exportTypes: ['csv', 'txt', 'doc', 'excel'],
+            clickToSelect: false,
+            singleSelect: false,
+            mobileResponsive: true,
+            maintainSelected: false,
+            rememberSelected: false,
+            fixedColumns: false,
+            fixedNumber: 0,
+            fixedRightNumber: 0,
+            queryParams: $.table.queryParams,
+            rowStyle: undefined
+        };
+        var options = $.extend(defaults, optionss);
+        table.options = options;
+        table.config[options.id] = options;
+        $.table.initEvent();
+        $('#' + options.id).bootstrapTable({
+            id: options.id,
+            url: options.url,                                   // 请求后台的URL（*）
+            contentType: "application/x-www-form-urlencoded",   // 编码类型
+            method: options.method,                             // 请求方式（*）
+            cache: false,                                       // 是否使用缓存
+            height: options.height,                             // 表格的高度
+            striped: options.striped,                           // 是否显示行间隔色
+            code:options.code,
+            sortable: true,                                     // 是否启用排序
+            sortStable: true,                                   // 设置为 true 将获得稳定的排序
+            sortName: options.sortName,                         // 排序列名称
+            sortOrder: options.sortOrder,                       // 排序方式  asc 或者 desc
+            pagination: options.pagination,                     // 是否显示分页（*）
+            paginationLoop: options.paginationLoop,             // 是否启用分页条无限循环的功能
+            pageNumber: 1,                                      // 初始化加载第一页，默认第一页
+            pageSize: options.pageSize,                         // 每页的记录行数（*）
+            pageList: options.pageList,                         // 可供选择的每页的行数（*）
+            firstLoad: options.firstLoad,                       // 是否首次请求加载数据，对于数据较大可以配置false
+            escape: options.escape,                             // 转义HTML字符串
+            showFooter: options.showFooter,                     // 是否显示表尾
+            iconSize: 'outline',                                // 图标大小：undefined默认的按钮尺寸 xs超小按钮sm小按钮lg大按钮
+            toolbar: '#' + options.toolbar,                     // 指定工作栏
+            loadingFontSize: options.loadingFontSize,           // 自定义加载文本的字体大小
+            sidePagination: options.sidePagination,             // server启用服务端分页client客户端分页
+            search: options.search,                             // 是否显示搜索框功能
+            searchText: options.searchText,                     // 搜索框初始显示的内容，默认为空
+            showSearch: options.showSearch,                     // 是否显示检索信息
+            showPageGo: options.showPageGo,                     // 是否显示跳转页
+            showRefresh: options.showRefresh,                   // 是否显示刷新按钮
+            showColumns: options.showColumns,                   // 是否显示隐藏某列下拉框
+            showToggle: options.showToggle,                     // 是否显示详细视图和列表视图的切换按钮
+            showExport: options.showExport,                     // 是否支持导出文件
+            showPrint: options.showPrint,                       // 是否支持打印页面
+            showHeader: options.showHeader,                     // 是否显示表头
+            showFullscreen: options.showFullscreen,             // 是否显示全屏按钮
+            uniqueId: options.uniqueId,                         // 唯一的标识符
+            clickToSelect: options.clickToSelect,               // 是否启用点击选中行
+            singleSelect: options.singleSelect,                 // 是否单选checkbox
+            mobileResponsive: options.mobileResponsive,         // 是否支持移动端适配
+            cardView: options.cardView,                         // 是否启用显示卡片视图
+            detailView: options.detailView,                     // 是否启用显示细节视图
+            onCheck: options.onCheck,                           // 当选择此行时触发
+            onUncheck: options.onUncheck,                       // 当取消此行时触发
+            onCheckAll: options.onCheckAll,                     // 当全选行时触发
+            onUncheckAll: options.onUncheckAll,                 // 当取消全选行时触发
+            onClickRow: options.onClickRow,                     // 点击某行触发的事件
+            onDblClickRow: options.onDblClickRow,               // 双击某行触发的事件
+            onClickCell: options.onClickCell,                   // 单击某格触发的事件
+            onDblClickCell: options.onDblClickCell,             // 双击某格触发的事件
+            onEditableSave: options.onEditableSave,             // 行内编辑保存的事件
+            onExpandRow: options.onExpandRow,                   // 点击详细视图的事件
+            onPostBody: options.onPostBody,                     // 渲染完成后执行的事件
+            maintainSelected: options.maintainSelected,         // 前端翻页时保留所选行
+            rememberSelected: options.rememberSelected,         // 启用翻页记住前面的选择
+            fixedColumns: options.fixedColumns,                 // 是否启用冻结列（左侧）
+            fixedNumber: options.fixedNumber,                   // 列冻结的个数（左侧）
+            fixedRightNumber: options.fixedRightNumber,         // 列冻结的个数（右侧）
+            onReorderRow: options.onReorderRow,                 // 当拖拽结束后处理函数
+            queryParams: options.queryParams,                   // 传递参数（*）
+            rowStyle: options.rowStyle,                         // 通过自定义函数设置行样式
+            footerStyle: options.footerStyle,                   // 通过自定义函数设置页脚样式
+            headerStyle: options.headerStyle,                   // 通过自定义函数设置标题样式
+            columns: options.columns,                           // 显示列信息（*）
+            data: options.data,                                 // 被加载的数据
+            responseHandler: $.table.responseHandler,           // 在加载服务器发送来的数据之前处理函数
+            onLoadSuccess: $.table.onLoadSuccess,               // 当所有数据被加载时触发处理函数
+            exportOptions: options.exportOptions,               // 前端导出忽略列索引
+            exportDataType: options.exportDataType,             // 导出方式（默认all：导出所有数据；basic：导出当前页的数据；selected：导出选中的数据）
+            exportTypes: options.exportTypes,                   // 导出文件类型 （json、xml、png、csv、txt、sql、doc、excel、xlsx、powerpoint、pdf）
+            printPageBuilder: options.printPageBuilder,         // 自定义打印页面模板
+            detailFormatter: options.detailFormatter,           // 在行下面展示其他数据列表
+        });
+    }
+
+    function edit(id) {
+        table.set();
+        if($.common.isEmpty(id) && table.options.type == table_type.bootstrapTreeTable) {
+            var row = $("#" + table.options.id).bootstrapTreeTable('getSelections')[0];
+            if ($.common.isEmpty(row)) {
+                $.modal.alertWarning("请至少选择一条记录");
+                return;
+            }
+            var url = table.options.updateUrl.replace("{id}", row[table.options.uniqueId]);
+            open("修改" + table.options.modalName, url);
+        } else {
+            open("修改" + table.options.modalName, $.operate.editUrl(id));
+        }
+    }
+
+
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            saveModal(prefix + "/edit", $('#form-baw_commodity_classify_wx_edit').serialize());
+        }
+    }
+
+    function saveModal(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍候...");
+            },
+            success: function(result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                if (result.code == web_status.SUCCESS) {
+                    // $.modal.alertSuccess(result.msg)
+                } else if (result.code == web_status.WARNING) {
+                    $.modal.alertWarning(result.msg)
+                } else {
+                    $.modal.alertError(result.msg);
+                }
+                $.modal.closeLoading();
+            }
+        };
+        $.ajax(config)
+    }
+    // 弹出层指定宽度
+    function  open(title, url, width, height, callback) {
+        // 如果是移动端，就使用自适应大小弹窗
+        if ($.common.isMobile()) {
+            width = 'auto';
+            height = 'auto';
+        }
+        if ($.common.isEmpty(title)) {
+            title = false;
+        }
+        if ($.common.isEmpty(url)) {
+            url = "/404.html";
+        }
+        if ($.common.isEmpty(width)) {
+            width = 800;
+        }
+        if ($.common.isEmpty(height)) {
+            height = ($(window).height() - 50);
+        }
+        if ($.common.isEmpty(callback)) {
+            callback = function(index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+            }
+        }
+        top.layer.open({
+            type: 2,
+            area: [width + 'px', height + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: title,
+            content: url,
+            btn: ['确定', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: callback,
+            cancel: function(index) {
+                return true;
+            },
+            end:function () {
+                $.table.refresh("bootstrap-table1")
+            }
+        });
+    }
+</script>
+</body>
+</html>

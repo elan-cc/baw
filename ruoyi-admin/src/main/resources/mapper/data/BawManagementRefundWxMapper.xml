@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawManagementRefundWxMapper">
+
+    <resultMap type="BawManagementRefundWx" id="BawManagementRefundWxResult">
+        <result property="id"    column="id"    />
+        <result property="managementId"    column="management_id"    />
+        <result property="managementNumber"    column="management_number"    />
+        <result property="managementMoney"    column="management_money"    />
+        <result property="refundMoney"    column="refund_money"    />
+        <result property="cargoStatus"    column="cargo_status"    />
+        <result property="refundReason"    column="refund_reason"    />
+        <result property="describe"    column="describe"    />
+        <result property="pictureUrl"    column="picture_url"    />
+        <result property="refundNumber"    column="refund_number"    />
+        <result property="applyRefundTime"    column="apply_refund_time"    />
+        <result property="refundType"    column="refund_type"    />
+        <result property="refundStatus"    column="refund_status"    />
+        <result property="userId"    column="user_id"    />
+        <result property="reviewer"    column="reviewer"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="failureReason"    column="failure_reason"    />
+    </resultMap>
+
+    <sql id="selectBawManagementRefundWxVo">
+        select id, management_id, management_number, management_money, refund_money, cargo_status, refund_reason, `describe`, picture_url, refund_number, apply_refund_time, refund_type, refund_status, user_id, reviewer, approval_time,failure_reason from baw_management_refund_wx
+    </sql>
+
+    <select id="selectBawManagementRefundWxList" parameterType="BawManagementRefundWx" resultMap="BawManagementRefundWxResult">
+        select a.*,b.`name`,b.telephone from baw_management_refund_wx a LEFT OUTER JOIN baw_order_management b ON a.management_id = b.id
+        <where>
+            <if test="managementId != null "> and management_id = #{managementId}</if>
+            <if test="managementNumber != null and managementNumber != ''"> and management_number = #{managementNumber}</if>
+            <if test="managementMoney != null "> and management_money = #{managementMoney}</if>
+            <if test="refundMoney != null "> and refund_money = #{refundMoney}</if>
+            <if test="cargoStatus != null "> and cargo_status = #{cargoStatus}</if>
+            <if test="refundReason != null "> and refund_reason = #{refundReason}</if>
+            <if test="describe != null  and describe != ''"> and `describe` = #{describe}</if>
+            <if test="pictureUrl != null  and pictureUrl != ''"> and picture_url = #{pictureUrl}</if>
+            <if test="refundNumber != null  and refundNumber != ''"> and refund_number = #{refundNumber}</if>
+            <if test="applyRefundTime != null "> and apply_refund_time = #{applyRefundTime}</if>
+            <if test="refundType != null "> and refund_type = #{refundType}</if>
+            <if test="refundStatus != null "> and refund_status = #{refundStatus}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="reviewer != null  and reviewer != ''"> and reviewer = #{reviewer}</if>
+            <if test="approvalTime != null "> and approval_time = #{approvalTime}</if>
+            <if test="failureReason != null "> and failure_reason = #{failureReason}</if>
+        </where>
+    </select>
+
+    <select id="selectBawManagementRefundWxById" parameterType="Integer" resultMap="BawManagementRefundWxResult">
+        <include refid="selectBawManagementRefundWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawManagementRefundWx" parameterType="BawManagementRefundWx">
+        insert into baw_management_refund_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="managementId != null">management_id,</if>
+            <if test="managementNumber != null">management_number,</if>
+            <if test="managementMoney != null">management_money,</if>
+            <if test="refundMoney != null">refund_money,</if>
+            <if test="cargoStatus != null">cargo_status,</if>
+            <if test="refundReason != null">refund_reason,</if>
+            <if test="describe != null">`describe`,</if>
+            <if test="pictureUrl != null">picture_url,</if>
+            <if test="refundNumber != null">refund_number,</if>
+            <if test="applyRefundTime != null">apply_refund_time,</if>
+            <if test="refundType != null">refund_type,</if>
+            <if test="refundStatus != null">refund_status,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="reviewer != null">reviewer,</if>
+            <if test="approvalTime != null">approval_time,</if>
+            <if test="failureReason != null">failure_reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="managementId != null">#{managementId},</if>
+            <if test="managementNumber != null">#{managementNumber},</if>
+            <if test="managementMoney != null">#{managementMoney},</if>
+            <if test="refundMoney != null">#{refundMoney},</if>
+            <if test="cargoStatus != null">#{cargoStatus},</if>
+            <if test="refundReason != null">#{refundReason},</if>
+            <if test="describe != null">#{describe},</if>
+            <if test="pictureUrl != null">#{pictureUrl},</if>
+            <if test="refundNumber != null">#{refundNumber},</if>
+            <if test="applyRefundTime != null">#{applyRefundTime},</if>
+            <if test="refundType != null">#{refundType},</if>
+            <if test="refundStatus != null">#{refundStatus},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="reviewer != null">#{reviewer},</if>
+            <if test="approvalTime != null">#{approvalTime},</if>
+            <if test="failureReason != null">#{failureReason},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawManagementRefundWx" parameterType="BawManagementRefundWx">
+        update baw_management_refund_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="managementId != null">management_id = #{managementId},</if>
+            <if test="managementNumber != null">management_number = #{managementNumber},</if>
+            <if test="managementMoney != null">management_money = #{managementMoney},</if>
+            <if test="refundMoney != null">refund_money = #{refundMoney},</if>
+            <if test="cargoStatus != null">cargo_status = #{cargoStatus},</if>
+            <if test="refundReason != null">refund_reason = #{refundReason},</if>
+            <if test="describe != null">`describe` = #{describe},</if>
+            <if test="pictureUrl != null">picture_url = #{pictureUrl},</if>
+            <if test="refundNumber != null">refund_number = #{refundNumber},</if>
+            <if test="applyRefundTime != null">apply_refund_time = #{applyRefundTime},</if>
+            <if test="refundType != null">refund_type = #{refundType},</if>
+            <if test="refundStatus != null">refund_status = #{refundStatus},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="reviewer != null">reviewer = #{reviewer},</if>
+            <if test="approvalTime != null">approval_time = #{approvalTime},</if>
+            <if test="failureReason != null">failure_reason = #{failureReason},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawManagementRefundWxById" parameterType="Integer">
+        delete from baw_management_refund_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawManagementRefundWxByIds" parameterType="String">
+        delete from baw_management_refund_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawTopicActivityMapper">
+    
+    <resultMap type="BawTopicActivity" id="BawTopicActivityResult">
+        <result property="id"    column="id"    />
+        <result property="activityStatus"    column="activity_status"    />
+        <result property="activityType"    column="activity_type"    />
+        <result property="title"    column="title"    />
+        <result property="subTitle"    column="sub_title"    />
+        <result property="description"    column="description"    />
+        <result property="pic"    column="pic"    />
+        <result property="isOutLink"    column="is_out_link"    />
+        <result property="outLink"    column="out_link"    />
+        <result property="outLinkTarget"    column="out_link_target"    />
+        <result property="content"    column="content"    />
+        <result property="fabuDate"    column="fabu_date"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="sort"    column="sort"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawTopicActivityVo">
+        select id, activity_status, activity_type, title, sub_title, description, pic, is_out_link, out_link, out_link_target, content, fabu_date, is_disable, is_delete, sort, add_user, add_date from baw_topic_activity
+    </sql>
+
+    <select id="selectBawTopicActivityList" parameterType="BawTopicActivity" resultMap="BawTopicActivityResult">
+        <include refid="selectBawTopicActivityVo"/>
+        <where>  
+            <if test="activityStatus != null "> and activity_status = #{activityStatus}</if>
+            <if test="activityType != null "> and activity_type = #{activityType}</if>
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by fabu_date desc
+    </select>
+
+    <select id="selectBawTopicActivityListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, activity_status, activity_type, title, sub_title, description, pic, is_out_link, out_link, out_link_target, content, fabu_date
+        from baw_topic_activity
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="year != null and year != 0 "> and FROM_UNIXTIME(fabu_date,'%Y') = #{year}</if>
+            <if test="month != null and month != 0 "> and FROM_UNIXTIME(fabu_date,'%c') = #{month}</if>
+            <if test="activityStatus != null and activityStatus != 0 "> and activity_status = #{activityStatus}</if>
+            <if test="activityType != null and activityType != 0 "> and activity_type = #{activityType}</if>
+            <if test="keywords != null  and keywords != ''"> and title like concat('%', #{keywords}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectBawTopicActivityYearMonthListForApi" resultType="org.springframework.ui.ModelMap">
+        SELECT FROM_UNIXTIME(fabu_date,'%Y') as date_year,FROM_UNIXTIME(fabu_date,'%m') as date_month FROM `baw_topic_activity` group by date_year,date_month order by date_year desc,date_month desc
+    </select>
+    
+    <select id="selectBawTopicActivityById" parameterType="Integer" resultMap="BawTopicActivityResult">
+        <include refid="selectBawTopicActivityVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBawTopicActivityByIdForApi" parameterType="Integer" resultType="org.springframework.ui.ModelMap">
+        select id, activity_status, activity_type, title, sub_title, description, pic, is_out_link, out_link, out_link_target, content, fabu_date
+        from baw_topic_activity
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawTopicActivity" parameterType="BawTopicActivity" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_topic_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityStatus != null">activity_status,</if>
+            <if test="activityType != null">activity_type,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="subTitle != null">sub_title,</if>
+            <if test="description != null">description,</if>
+            <if test="pic != null">pic,</if>
+            <if test="isOutLink != null">is_out_link,</if>
+            <if test="outLink != null">out_link,</if>
+            <if test="outLinkTarget != null">out_link_target,</if>
+            <if test="content != null">content,</if>
+            <if test="fabuDate != null">fabu_date,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="sort != null">sort,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityStatus != null">#{activityStatus},</if>
+            <if test="activityType != null">#{activityType},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="subTitle != null">#{subTitle},</if>
+            <if test="description != null">#{description},</if>
+            <if test="pic != null">#{pic},</if>
+            <if test="isOutLink != null">#{isOutLink},</if>
+            <if test="outLink != null">#{outLink},</if>
+            <if test="outLinkTarget != null">#{outLinkTarget},</if>
+            <if test="content != null">#{content},</if>
+            <if test="fabuDate != null">#{fabuDate},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawTopicActivity" parameterType="BawTopicActivity">
+        update baw_topic_activity
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="activityStatus != null">activity_status = #{activityStatus},</if>
+            <if test="activityType != null">activity_type = #{activityType},</if>
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="subTitle != null">sub_title = #{subTitle},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="isOutLink != null">is_out_link = #{isOutLink},</if>
+            <if test="outLink != null">out_link = #{outLink},</if>
+            <if test="outLinkTarget != null">out_link_target = #{outLinkTarget},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="fabuDate != null">fabu_date = #{fabuDate},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawTopicActivityById" parameterType="Integer">
+        update baw_topic_activity set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawTopicActivityByIds" parameterType="String">
+        update baw_topic_activity set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawTopicActivityByIdPhysic" parameterType="Integer">
+        delete from baw_topic_activity where id = #{id}
+    </delete>
+
+    <delete id="deleteBawTopicActivityByIdsPhysic" parameterType="String">
+        delete from baw_topic_activity where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

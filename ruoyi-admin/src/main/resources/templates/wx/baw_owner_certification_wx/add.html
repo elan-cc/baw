@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增车主认证')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-baw_owner_certification_wx-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">底盘号：</label>
+                <div class="col-sm-8">
+                    <input name="chassis" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "wx/baw_owner_certification_wx"
+        $("#form-baw_owner_certification_wx-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-baw_owner_certification_wx-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

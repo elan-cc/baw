@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawTestDriveWxMapper">
+
+    <resultMap type="BawTestDriveWx" id="BawTestDriveWxResult">
+        <result property="id"    column="id"    />
+        <result property="realname"    column="realname"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="sex"    column="sex"    />
+        <result property="carSeries"    column="car_series"    />
+        <result property="carSeriesCode"    column="car_series_code"    />
+        <result property="carType"    column="car_type"    />
+        <result property="carTypeCode"    column="car_type_code"    />
+        <result property="province"    column="province"    />
+        <result property="provinceCode"    column="province_code"    />
+        <result property="city"    column="city"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="dealer"    column="dealer"    />
+        <result property="dealerCode"    column="dealer_code"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addDate"    column="add_date"    />
+        <result property="dateCode"    column="date_code"    />
+        <result property="sourceCode"    column="source_code"    />
+        <result property="userId"    column="user_id"    />
+        <result property="status"    column="status"    />
+        <result property="appointmentType"    column="appointment_type"    />
+    </resultMap>
+
+    <sql id="selectBawTestDriveWxVo">
+        select id, realname, mobile, sex, car_series, car_series_code, car_type, car_type_code, province, province_code, city, city_code, dealer, dealer_code, is_delete, add_date, date_code, source_code, user_id,appointment_type,
+            CASE
+            WHEN date_code <![CDATA[>]]> NOW() THEN 0 -- 待试驾
+            WHEN date_code <![CDATA[<]]> NOW()  AND status = 0 THEN 1 -- 待评价
+            WHEN status = 1 THEN 1 -- 待评价
+            WHEN status = 2 THEN 2 -- 已完成
+            WHEN status = 3 THEN 3 -- 已取消
+            END AS status
+        from baw_test_drive_wx
+    </sql>
+
+    <select id="selectBawTestDriveWxList" parameterType="BawTestDriveWx" resultMap="BawTestDriveWxResult">
+        <include refid="selectBawTestDriveWxVo"/>
+        <where>
+            <if test="realname != null  and realname != ''"> and realname like concat('%', #{realname}, '%')</if>
+            <if test="mobile != null  and mobile != ''"> and mobile = #{mobile}</if>
+            <if test="sex != null "> and sex = #{sex}</if>
+            <if test="carSeries != null  and carSeries != ''"> and car_series like concat('%',#{carSeries},'%')</if>
+            <if test="carSeriesCode != null  and carSeriesCode != ''"> and car_series_code = #{carSeriesCode}</if>
+            <if test="carType != null  and carType != ''"> and car_type like concat('%',#{carType},'%')</if>
+            <if test="carTypeCode != null  and carTypeCode != ''"> and car_type_code = #{carTypeCode}</if>
+            <if test="province != null  and province != ''"> and province like concat('%', #{province},'%')</if>
+            <if test="provinceCode != null  and provinceCode != ''"> and province_code = #{provinceCode}</if>
+            <if test="city != null  and city != ''"> and city like concat('%', #{city},'%')</if>
+            <if test="cityCode != null  and cityCode != ''"> and city_code = #{cityCode}</if>
+            <if test="dealer != null  and dealer != ''"> and dealer = #{dealer}</if>
+            <if test="dealerCode != null  and dealerCode != ''"> and dealer_code = #{dealerCode}</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="addDate != null "> and add_date = #{addDate}</if>
+            <if test="dateCode != null "> and date_code = #{dateCode}</if>
+            <if test="sourceCode != null  and sourceCode != ''"> and source_code = #{sourceCode}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="appointmentType != null "> and appointment_type = #{appointmentType}</if>
+        </where>
+    </select>
+
+    <select id="selectBawTestDriveWxById" parameterType="Integer" resultMap="BawTestDriveWxResult">
+        <include refid="selectBawTestDriveWxVo"/>
+        where id = #{id} and is_delete = 0
+    </select>
+
+    <insert id="insertBawTestDriveWx" parameterType="BawTestDriveWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_test_drive_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="realname != null">realname,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="sex != null">sex,</if>
+            <if test="carSeries != null">car_series,</if>
+            <if test="carSeriesCode != null">car_series_code,</if>
+            <if test="carType != null">car_type,</if>
+            <if test="carTypeCode != null">car_type_code,</if>
+            <if test="province != null">province,</if>
+            <if test="provinceCode != null">province_code,</if>
+            <if test="city != null">city,</if>
+            <if test="cityCode != null">city_code,</if>
+            <if test="dealer != null">dealer,</if>
+            <if test="dealerCode != null">dealer_code,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addDate != null">add_date,</if>
+            <if test="dateCode != null">date_code,</if>
+            <if test="sourceCode != null">source_code,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="status != null">status,</if>
+            <if test="appointmentType != null">appointment_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="realname != null">#{realname},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="carSeries != null">#{carSeries},</if>
+            <if test="carSeriesCode != null">#{carSeriesCode},</if>
+            <if test="carType != null">#{carType},</if>
+            <if test="carTypeCode != null">#{carTypeCode},</if>
+            <if test="province != null">#{province},</if>
+            <if test="provinceCode != null">#{provinceCode},</if>
+            <if test="city != null">#{city},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="dealer != null">#{dealer},</if>
+            <if test="dealerCode != null">#{dealerCode},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addDate != null">#{addDate},</if>
+            <if test="dateCode != null">#{dateCode},</if>
+            <if test="sourceCode != null">#{sourceCode},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="appointmentType != null">#{appointmentType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawTestDriveWx" parameterType="BawTestDriveWx">
+        update baw_test_drive_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="realname != null">realname = #{realname},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="carSeries != null">car_series = #{carSeries},</if>
+            <if test="carSeriesCode != null">car_series_code = #{carSeriesCode},</if>
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="carTypeCode != null">car_type_code = #{carTypeCode},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="provinceCode != null">province_code = #{provinceCode},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="cityCode != null">city_code = #{cityCode},</if>
+            <if test="dealer != null">dealer = #{dealer},</if>
+            <if test="dealerCode != null">dealer_code = #{dealerCode},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+            <if test="dateCode != null">date_code = #{dateCode},</if>
+            <if test="sourceCode != null">source_code = #{sourceCode},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="appointmentType != null">appointment_type = #{appointmentType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawTestDriveWxById" parameterType="Integer">
+        update baw_test_drive_wx set is_delete = 1 where id = #{id} and user_id = #{userId}
+    </delete>
+
+    <delete id="deleteBawTestDriveWxByIds" parameterType="String">
+        update baw_test_drive_wx set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectBawTestDriveWxByMobile" resultMap="BawTestDriveWxResult">
+        <include refid="selectBawTestDriveWxVo"/>
+        where mobile = #{mobile} and appointment_type = #{appointmentType}
+    </select>
+
+    <select id="testDriveRecord" resultType="org.springframework.ui.ModelMap">
+        SELECT
+            t.id,t.car_series as carSeries, t.date_code as dateCode, b.bu_sort1 as buSort1, b.street, b.lng, b.lat, b.tel_number as telNumber,
+        CASE
+            WHEN t.date_code <![CDATA[>]]> NOW()  AND t.status = 0 THEN 0 -- 待试驾
+            WHEN t.date_code <![CDATA[<]]> NOW()  AND t.status = 0 THEN 1 -- 待评价
+            WHEN t.status = 1 THEN 1 -- 待评价
+            WHEN t.status = 2 THEN 2 -- 已完成
+            WHEN t.status = 3 THEN 3 -- 已取消
+          END AS status
+          FROM
+            baw_test_drive_wx t
+            LEFT JOIN baw_base_dealershop b ON t.dealer_code = b.dlr_code
+        WHERE
+          t.user_id = #{userId} and t.is_delete = 0 and t.appointment_type = #{appointmentType}
+    </select>
+</mapper>

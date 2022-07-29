@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawInformationEnterpriseMapper">
+    
+    <resultMap type="BawInformationEnterprise" id="BawInformationEnterpriseResult">
+        <result property="id"    column="id"    />
+        <result property="showName"    column="show_name"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="content"    column="content"    />
+        <result property="url"    column="url"    />
+        <result property="showTime"    column="show_time"    />
+        <result property="sort"    column="sort"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectBawInformationEnterpriseVo">
+        select id, show_name, keyword, content, url, show_time, sort, create_by, create_time, update_by, update_time, remark from baw_information_enterprise
+    </sql>
+
+    <select id="selectBawInformationEnterpriseList" parameterType="BawInformationEnterprise" resultMap="BawInformationEnterpriseResult">
+        <include refid="selectBawInformationEnterpriseVo"/>
+        <where>  
+            <if test="showName != null  and showName != ''"> and show_name like concat('%', #{showName}, '%')</if>
+            <if test="keyword != null  and keyword != ''">   and keyword  like concat('%', #{keyword}, '%')</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="url != null  and url != ''"> and url = #{url}</if>
+            <if test="showTime != null  and showTime != ''"> and show_time = #{showTime}</if>
+            <if test="sort != null "> and sort = #{sort}</if>
+        </where>
+    </select>
+    
+    <select id="selectBawInformationEnterpriseById" parameterType="Long" resultMap="BawInformationEnterpriseResult">
+        <include refid="selectBawInformationEnterpriseVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawInformationEnterprise" parameterType="BawInformationEnterprise" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_information_enterprise
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="showName != null">show_name,</if>
+            <if test="keyword != null">keyword,</if>
+            <if test="content != null">content,</if>
+            <if test="url != null">url,</if>
+            <if test="showTime != null">show_time,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="showName != null">#{showName},</if>
+            <if test="keyword != null">#{keyword},</if>
+            <if test="content != null">#{content},</if>
+            <if test="url != null">#{url},</if>
+            <if test="showTime != null">#{showTime},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawInformationEnterprise" parameterType="BawInformationEnterprise">
+        update baw_information_enterprise
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="showName != null">show_name = #{showName},</if>
+            <if test="keyword != null">keyword = #{keyword},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="showTime != null">show_time = #{showTime},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawInformationEnterpriseById" parameterType="Long">
+        delete from baw_information_enterprise where id = #{id}
+    </delete>
+
+    <delete id="deleteBawInformationEnterpriseByIds" parameterType="String">
+        delete from baw_information_enterprise where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

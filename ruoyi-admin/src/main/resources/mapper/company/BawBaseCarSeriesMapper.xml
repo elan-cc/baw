@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawBaseCarSeriesMapper">
+
+    <resultMap type="BawBaseCarSeries" id="BawBaseCarSeriesResult">
+        <result property="id"    column="id"    />
+        <result property="carSeriesCode"    column="car_series_code"    />
+        <result property="carSeriesEn"    column="car_series_en"    />
+        <result property="carSeriesCn"    column="car_series_cn"    />
+        <result property="carBrandCode"    column="car_brand_code"    />
+        <result property="isEnable"    column="is_enable"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectBawBaseCarSeriesVo">
+        select id, car_series_code, car_series_en, car_series_cn, car_brand_code, is_enable, create_time, create_by, update_time, update_by from baw_base_car_series
+    </sql>
+
+    <select id="selectBawBaseCarSeriesList" parameterType="BawBaseCarSeries" resultMap="BawBaseCarSeriesResult">
+        <include refid="selectBawBaseCarSeriesVo"/>
+        <where>
+            <if test="carSeriesCode != null  and carSeriesCode != ''"> and car_series_code = #{carSeriesCode}</if>
+            <if test="carSeriesEn != null  and carSeriesEn != ''"> and car_series_en = #{carSeriesEn}</if>
+            <if test="carSeriesCn != null  and carSeriesCn != ''"> and car_series_cn = #{carSeriesCn}</if>
+            <if test="carBrandCode != null  and carBrandCode != ''"> and car_brand_code = #{carBrandCode}</if>
+            <if test="isEnable != null  and isEnable != ''"> and is_enable = #{isEnable}</if>
+        </where>
+    </select>
+
+    <select id="selectBawBaseCarSeriesById" parameterType="Integer" resultMap="BawBaseCarSeriesResult">
+        <include refid="selectBawBaseCarSeriesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawBaseCarSeries" parameterType="BawBaseCarSeries" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_base_car_series
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="carSeriesCode != null">car_series_code,</if>
+            <if test="carSeriesEn != null">car_series_en,</if>
+            <if test="carSeriesCn != null">car_series_cn,</if>
+            <if test="carBrandCode != null">car_brand_code,</if>
+            <if test="isEnable != null">is_enable,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="carSeriesCode != null">#{carSeriesCode},</if>
+            <if test="carSeriesEn != null">#{carSeriesEn},</if>
+            <if test="carSeriesCn != null">#{carSeriesCn},</if>
+            <if test="carBrandCode != null">#{carBrandCode},</if>
+            <if test="isEnable != null">#{isEnable},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawBaseCarSeries" parameterType="BawBaseCarSeries">
+        update baw_base_car_series
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="carSeriesCode != null">car_series_code = #{carSeriesCode},</if>
+            <if test="carSeriesEn != null">car_series_en = #{carSeriesEn},</if>
+            <if test="carSeriesCn != null">car_series_cn = #{carSeriesCn},</if>
+            <if test="carBrandCode != null">car_brand_code = #{carBrandCode},</if>
+            <if test="isEnable != null">is_enable = #{isEnable},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawBaseCarSeriesById" parameterType="Integer">
+        delete from baw_base_car_series where id = #{id}
+    </delete>
+
+    <delete id="deleteBawBaseCarSeriesByIds" parameterType="String">
+        delete from baw_base_car_series where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectBawBaseCarSeriesByCode" resultType="org.springframework.ui.ModelMap" parameterType="String">
+        SELECT
+                car_series_code AS dictValue,
+                car_series_cn AS dictLabel
+        FROM
+                baw_base_car_series
+                where  is_enable = 1
+    </select>
+
+    <select id="selectCarSeriesCodeByCode" resultType="java.lang.String" parameterType="java.lang.String">
+        select car_series_cn
+        from baw_base_car_series
+        where car_series_code = #{carSeriesCode}
+    </select>
+</mapper>

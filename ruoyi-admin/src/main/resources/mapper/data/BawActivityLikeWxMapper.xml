@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawActivityLikeWxMapper">
+
+    <resultMap type="BawActivityLikeWx" id="BawActivityLikeWxResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="likesTime"    column="likes_time"    />
+    </resultMap>
+
+    <sql id="selectBawActivityLikeWxVo">
+        select id, user_id, activity_id, likes_time from baw_activity_like_wx
+    </sql>
+
+    <select id="selectBawActivityLikeWxList" parameterType="BawActivityLikeWx" resultMap="BawActivityLikeWxResult">
+        <include refid="selectBawActivityLikeWxVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="activityId != null "> and activity_id = #{activityId}</if>
+            <if test="likesTime != null "> and likes_time = #{likesTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBawActivityLikeWxById" parameterType="Integer" resultMap="BawActivityLikeWxResult">
+        <include refid="selectBawActivityLikeWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawActivityLikeWx" parameterType="BawActivityLikeWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_activity_like_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="likesTime != null">likes_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="likesTime != null">#{likesTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawActivityLikeWx" parameterType="BawActivityLikeWx">
+        update baw_activity_like_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="likesTime != null">likes_time = #{likesTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawActivityLikeWxById" parameterType="Integer">
+        delete from baw_activity_like_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawActivityLikeWxByIds" parameterType="String">
+        delete from baw_activity_like_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+		<select id="selectCountByActivityIdAndUserId" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            baw_activity_like_wx
+        WHERE
+            activity_id = #{activityId}
+          AND user_id = #{userId};
+		</select>
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawActivityCommentLikeWxMapper">
+
+    <resultMap type="BawActivityCommentLikeWx" id="BawActivityCommentLikeWxResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="comment_id"    column="commentId"    />
+        <result property="likeTime"    column="like_time"    />
+    </resultMap>
+
+    <sql id="selectBawActivityCommentLikeWxVo">
+        select id, user_id, comment_id, like_time from baw_activity_comment_like_wx
+    </sql>
+
+    <select id="selectBawActivityCommentLikeWxList" parameterType="BawActivityCommentLikeWx" resultMap="BawActivityCommentLikeWxResult">
+        <include refid="selectBawActivityCommentLikeWxVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="commentId != null "> and comment_id = #{commentId}</if>
+            <if test="likeTime != null "> and like_time = #{likeTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBawActivityCommentLikeWxById" parameterType="Integer" resultMap="BawActivityCommentLikeWxResult">
+        <include refid="selectBawActivityCommentLikeWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawActivityCommentLikeWx" parameterType="BawActivityCommentLikeWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_activity_comment_like_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="commentId != null">comment_id,</if>
+            <if test="likeTime != null">like_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="commentId != null">#{commentId},</if>
+            <if test="likeTime != null">#{likeTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawActivityCommentLikeWx" parameterType="BawActivityCommentLikeWx">
+        update baw_activity_comment_like_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="commentId != null">comment_id = #{commentId},</if>
+            <if test="likeTime != null">like_time = #{likeTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawActivityCommentLikeWxById" parameterType="Integer">
+        delete from baw_activity_comment_like_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawActivityCommentLikeWxByIds" parameterType="String">
+        delete from baw_activity_comment_like_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectCount" resultType="int">
+        SELECT
+            COUNT(*)
+        FROM
+            baw_activity_comment_like_wx
+        WHERE
+            comment_id = #{commentId}
+          AND user_id = #{userId};
+		</select>
+</mapper>

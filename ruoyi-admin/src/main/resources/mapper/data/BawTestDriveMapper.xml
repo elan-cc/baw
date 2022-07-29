@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawTestDriveMapper">
+
+    <resultMap type="BawTestDrive" id="BawTestDriveResult">
+        <result property="id"    column="id"    />
+        <result property="realname"    column="realname"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="sex"    column="sex"    />
+        <result property="carSeries"    column="car_series"    />
+        <result property="carSeriesCode"    column="car_series_code"    />
+        <result property="carType"    column="car_type"    />
+        <result property="carTypeCode"    column="car_type_code"    />
+        <result property="province"    column="province"    />
+        <result property="provinceCode"    column="province_code"    />
+        <result property="city"    column="city"    />
+        <result property="cityCode"    column="city_code"    />
+        <result property="dealer"    column="dealer"    />
+        <result property="dealerCode"    column="dealer_code"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawTestDriveVo">
+        select id, realname, mobile, sex, car_series, car_series_code, car_type, car_type_code,  province, province_code, city, city_code, dealer, dealer_code, is_delete, add_date from baw_test_drive
+    </sql>
+
+    <select id="selectBawTestDriveList" parameterType="BawTestDrive" resultMap="BawTestDriveResult">
+        <include refid="selectBawTestDriveVo"/>
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="realname != null  and realname != ''"> and realname like concat('%', #{realname}, '%')</if>
+            <if test="mobile != null  and mobile != ''"> and mobile like concat('%', #{mobile}, '%')</if>
+            <if test="carSeries != null  and carSeries != ''"> and car_series like concat('%', #{carSeries}, '%')</if>
+            <if test="carType != null  and carType != ''"> and car_type like concat('%', #{carType}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectBawTestDriveById" parameterType="Integer" resultMap="BawTestDriveResult">
+        <include refid="selectBawTestDriveVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectBawTestDriveByMobile" parameterType="String" resultMap="BawTestDriveResult">
+        <include refid="selectBawTestDriveVo"/>
+        where mobile = #{mobile}
+    </select>
+
+    <insert id="insertBawTestDrive" parameterType="BawTestDrive" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_test_drive
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="realname != null">realname,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="sex != null">sex,</if>
+            <if test="carSeries != null">car_series,</if>
+            <if test="carSeriesCode != null">car_series_code,</if>
+            <if test="carType != null">car_type,</if>
+            <if test="carTypeCode != null">car_type_code,</if>
+            <if test="province != null">province,</if>
+            <if test="provinceCode != null">province_code,</if>
+            <if test="city != null">city,</if>
+            <if test="cityCode != null">city_code,</if>
+            <if test="dealer != null">dealer,</if>
+            <if test="dealerCode != null">dealer_code,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addDate != null">add_date,</if>
+            <if test="receivingTime != null">receiving_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="realname != null">#{realname},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="carSeries != null">#{carSeries},</if>
+            <if test="carSeriesCode != null">#{carSeriesCode},</if>
+            <if test="carType != null">#{carType},</if>
+            <if test="carTypeCode != null">#{carTypeCode},</if>
+            <if test="province != null">#{province},</if>
+            <if test="provinceCode != null">#{provinceCode},</if>
+            <if test="city != null">#{city},</if>
+            <if test="cityCode != null">#{cityCode},</if>
+            <if test="dealer != null">#{dealer},</if>
+            <if test="dealerCode != null">#{dealerCode},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addDate != null">#{addDate},</if>
+            <if test="receivingTime != null">#{receivingTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawTestDrive" parameterType="BawTestDrive">
+        update baw_test_drive
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="realname != null">realname = #{realname},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="carSeries != null">car_series = #{carSeries},</if>
+            <if test="carSeriesCode != null">car_series_code = #{carSeriesCode},</if>
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="carTypeCode != null">car_type_code = #{carTypeCode},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="provinceCode != null">province_code = #{provinceCode},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="cityCode != null">city_code = #{cityCode},</if>
+            <if test="dealer != null">dealer = #{dealer},</if>
+            <if test="dealerCode != null">dealer_code = #{dealerCode},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawTestDriveById" parameterType="Integer">
+        update baw_test_drive set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawTestDriveByIds" parameterType="String">
+        update baw_test_drive set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawTestDriveByIdPhysic" parameterType="Integer">
+        delete from baw_test_drive where id = #{id}
+    </delete>
+
+    <delete id="deleteBawTestDriveByIdsPhysic" parameterType="String">
+        delete from baw_test_drive where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

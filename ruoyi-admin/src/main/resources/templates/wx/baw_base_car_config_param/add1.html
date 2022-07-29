@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增车型配置参数')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content" id="outerLayer">
+    <form class="form-horizontal m" id="form-baw_base_car_config_param-add">
+
+
+        <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车系：</label>
+            <div class="col-sm-4">
+                <select class="form-control m-b" id="serviceCode" name="carSeriesCode" th:with=" type=${@seriesCodeDict.getSerierCode()}">
+                    <option value="请选择车系"> 请选择车系</option>
+                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" required></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车型编码：</label>
+            <div class="col-sm-4">
+                <!--                <input name="carConfigCode" id="config" class="form-control" type="text" required>-->
+
+                <select class="form-control m-b" name="carTypeCode" id="config" ></select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车型配置编码：</label>
+            <div class="col-sm-4">
+<!--                <input name="carConfigCode" id="config" class="form-control" type="text" required>-->
+
+                <select class="form-control m-b" name="carConfigCode" id="carType" ></select>
+            </div>
+        </div>
+
+
+
+
+    </form>
+
+</div>
+<th:block th:include="include :: footer"/>
+<script>
+    // var serierDict = [[${@seriesCodeDict.getSerierCode()}]];
+    var prefix = ctx + "wx/baw_base_car_config_param"
+    $("#form-baw_base_car_config_param-add").validate({
+        focusCleanup: true
+    });
+
+    //URL调用后台接口处
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-baw_base_car_config_param-add').serialize());
+        }
+    }
+
+    function testAdd() {
+        //获取当前外层id
+        var nextLine = document.getElementById("form-baw_base_car_config_param-add");
+        //创建控件
+        var newDiv = document.createElement('div');
+        //填入HTML
+        newDiv.innerHTML =
+            "            <div class=\"form-group\">\n" +
+            "                <label class=\"col-sm-5 control-label is-required\">参数名code：</label>\n" +
+            "                <div class=\"col-sm-5\">\n" +
+            "                    <input name=\"paramCode\" class=\"form-control\" type=\"text\" >\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "            <div class=\"form-group\">\n" +
+            "                <label class=\"col-sm-5 control-label is-required\">参数名：</label>\n" +
+            "                <div class=\"col-sm-5\">\n" +
+            "                    <input name=\"paramName\" class=\"form-control\" type=\"text\" >\n" +
+            "                </div>\n" +
+            "            </div>\n" +
+            "            <div class=\"form-group\" id=\"innerLayer\">\n" +
+            "                <label class=\"col-sm-5 control-label is-required\">参数值：</label>\n" +
+            "                <div class=\"col-sm-5\">\n" +
+            "                    <input name=\"paramValue\" class=\"form-control\" type=\"text\" >\n" +
+            "                </div>\n" +
+            "                <div>\n" +
+            "                </div>\n" +
+            "            </div>";
+        //在外层中最后一行开始插入
+        nextLine.appendChild(newDiv)
+        console.log(nextLine.childNodes.length)
+    }
+
+    function testSubtract(count) {
+        //获取当前外层id
+        var nextLine = document.getElementById("form-baw_base_car_config_param-add");
+        if (nextLine.childNodes.length > count - 1) {
+            nextLine.removeChild(nextLine.childNodes[nextLine.childNodes.length - 1])
+            console.log(nextLine.childNodes.length)
+        } else {
+            console.log(nextLine.childNodes.length + "无法删除")
+        }
+
+    }
+    $("#serviceCode").ready(function () {
+        $.ajax({
+            url: prefix + "/getSerierCode",
+            type: 'GET',
+            data: {
+                serviceCode: $("#serviceCode").val(),
+            },
+            success:function (data) {
+                $("#config").empty();
+                $("#config").append("<option value=''>请先选择车型编号</option>");
+                $("#carType").append("<option value=''>请先选择车辆型号</option>");
+            }
+        })
+    });
+    $("#serviceCode").change(function () {
+        if ($("#serviceCode").val() == '请先选择车系编号') {
+            $("#config").empty();
+            $("#config").append("<option value=''>请先选择车系编号</option>");
+            $("#carType").empty();
+            $("#carType").append("<option value=''>请先选择车辆型号</option>");
+        } else {
+            $.ajax({
+                url: prefix + "/getSekectType",
+                type: 'GET',
+                data: {
+                    serviceCode: $("#serviceCode").val(),
+                },
+                success: function (data) {
+                    $("#config").empty();
+                    $("#carType").empty();
+                    $("#config").append("<option value=''>请选择车系编号</option>");
+                    $("#carType").append("<option value=''>请先选择车辆型号</option>");
+                    for (var i = 0; i < data.length; i++) {
+                        $("#config").append(
+                            "<option value='" + data[i].dictvalue + "' required>" + data[i].dictvalue + "</option>"
+                            +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                        );
+                    }
+
+                }
+            })
+        }
+    });
+    $("#config").change(function () {
+        $.ajax({
+            url: prefix + "/getSelectCodeApplet",
+            type: 'GET',
+            data: {
+                config: $("#config").val(),
+            },
+            success:function (data) {
+                $("#carType").empty();
+                $("#carType").append("<option value=''>请选车辆型号</option>");
+                for (var i = 0; i < data.length; i++){
+                    $("#carType").append(
+                        "<option value='" + data[i].dictvalue + "'>" + data[i].dictvalue + "</option>"
+                        +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                    );
+                }
+            }
+        })
+    });
+</script>
+</body>
+</html>

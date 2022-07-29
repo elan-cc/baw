@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawBigCustomerBusinessMapper">
+    
+    <resultMap type="BawBigCustomerBusiness" id="BawBigCustomerBusinessResult">
+        <result property="id"    column="id"    />
+        <result property="realname"    column="realname"    />
+        <result property="mobile"    column="mobile"    />
+        <result property="sex"    column="sex"    />
+        <result property="buycarUse"    column="buycar_use"    />
+        <result property="buycarNum"    column="buycar_num"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="carSeries"    column="car_series"    />
+        <result property="carType"    column="car_type"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawBigCustomerBusinessVo">
+        select id, realname, mobile, sex, buycar_use, buycar_num, company_name, car_series, car_type, province, city, is_delete, add_date from baw_big_customer_business
+    </sql>
+
+    <select id="selectBawBigCustomerBusinessList" parameterType="BawBigCustomerBusiness" resultMap="BawBigCustomerBusinessResult">
+        <include refid="selectBawBigCustomerBusinessVo"/>
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="realname != null  and realname != ''"> and realname like concat('%', #{realname}, '%')</if>
+            <if test="mobile != null  and mobile != ''"> and mobile like concat('%', #{mobile}, '%')</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectBawBigCustomerBusinessById" parameterType="Integer" resultMap="BawBigCustomerBusinessResult">
+        <include refid="selectBawBigCustomerBusinessVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawBigCustomerBusiness" parameterType="BawBigCustomerBusiness" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_big_customer_business
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="realname != null">realname,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="sex != null">sex,</if>
+            <if test="buycarUse != null">buycar_use,</if>
+            <if test="buycarNum != null">buycar_num,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="carSeries != null">car_series,</if>
+            <if test="carType != null">car_type,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="realname != null">#{realname},</if>
+            <if test="mobile != null">#{mobile},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="buycarUse != null">#{buycarUse},</if>
+            <if test="buycarNum != null">#{buycarNum},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="carSeries != null">#{carSeries},</if>
+            <if test="carType != null">#{carType},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawBigCustomerBusiness" parameterType="BawBigCustomerBusiness">
+        update baw_big_customer_business
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="realname != null">realname = #{realname},</if>
+            <if test="mobile != null">mobile = #{mobile},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="buycarUse != null">buycar_use = #{buycarUse},</if>
+            <if test="buycarNum != null">buycar_num = #{buycarNum},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="carSeries != null">car_series = #{carSeries},</if>
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawBigCustomerBusinessById" parameterType="Integer">
+        update baw_big_customer_business set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawBigCustomerBusinessByIds" parameterType="String">
+        update baw_big_customer_business set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawBigCustomerBusinessByIdPhysic" parameterType="Integer">
+        delete from baw_big_customer_business where id = #{id}
+    </delete>
+
+    <delete id="deleteBawBigCustomerBusinessByIdsPhysic" parameterType="String">
+        delete from baw_big_customer_business where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

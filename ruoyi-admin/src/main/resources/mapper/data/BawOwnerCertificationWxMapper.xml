@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawOwnerCertificationWxMapper">
+
+    <resultMap type="BawOwnerCertificationWx" id="BawOwnerCertificationWxResult">
+        <result property="id"    column="id"    />
+        <result property="chassis"    column="chassis"    />
+    </resultMap>
+
+    <sql id="selectBawOwnerCertificationWxVo">
+        select id, chassis from baw_owner_certification_wx
+    </sql>
+
+    <select id="selectBawOwnerCertificationWxList" parameterType="BawOwnerCertificationWx" resultMap="BawOwnerCertificationWxResult">
+        <include refid="selectBawOwnerCertificationWxVo"/>
+        <where>
+            <if test="chassis != null  and chassis != ''"> and chassis = #{chassis}</if>
+        </where>
+    </select>
+
+    <select id="selectBawOwnerCertificationWxById" parameterType="Integer" resultMap="BawOwnerCertificationWxResult">
+        <include refid="selectBawOwnerCertificationWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawOwnerCertificationWx" parameterType="BawOwnerCertificationWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_owner_certification_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chassis != null">chassis,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="creatyTime != null">creaty_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chassis != null">#{chassis},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="creatyTime != null">#{creatyTime},</if>
+
+        </trim>
+    </insert>
+
+    <update id="updateBawOwnerCertificationWx" parameterType="BawOwnerCertificationWx">
+        update baw_owner_certification_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chassis != null">chassis = #{chassis},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawOwnerCertificationWxById" parameterType="Integer">
+        delete from baw_owner_certification_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawOwnerCertificationWxByIds" parameterType="String">
+        delete from baw_owner_certification_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+
+    <select id="selectCount" resultType="Integer">
+        select  count(*) from  baw_owner_certification_wx where user_id = #{userId}
+    </select>
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawCommodityWxMapper">
+
+    <resultMap type="BawCommodityWx" id="BawCommodityWxResult">
+        <result property="id"    column="id"    />
+        <result property="picture"    column="picture"    />
+        <result property="name"    column="name"    />
+        <result property="classificationId"    column="classification_id"    />
+        <result property="rotationMap"    column="rotation_map"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="price"    column="price"    />
+        <result property="stock"    column="stock"    />
+        <result property="sales"    column="sales"    />
+        <result property="creatyTime"    column="creaty_time"    />
+        <result property="specifications"    column="specifications"    />
+    </resultMap>
+
+    <sql id="selectBawCommodityWxVo">
+        select id, picture, name, classification_id, rotation_map, introduction, price, stock, sales, creaty_time,specifications from baw_commodity_wx
+    </sql>
+
+    <select id="selectBawCommodityWxList" parameterType="BawCommodityWx" resultMap="BawCommodityWxResult">
+        <include refid="selectBawCommodityWxVo"/>
+        <where>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="classificationId != null "> and classification_id = #{classificationId}</if>
+            <if test="rotationMap != null  and rotationMap != ''"> and rotation_map = #{rotationMap}</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+            <if test="price != null  and price != ''"> and price = #{price}</if>
+            <if test="stock != null "> and stock = #{stock}</if>
+            <if test="sales != null "> and sales = #{sales}</if>
+            <if test="creatyTime != null "> and creaty_time = #{creatyTime}</if>
+            <if test="specifications != null "> and specifications = #{specifications}</if>
+        </where>
+    </select>
+
+    <select id="selectBawCommodityWxById" parameterType="Integer" resultMap="BawCommodityWxResult">
+        <include refid="selectBawCommodityWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawCommodityWx" parameterType="BawCommodityWx">
+        insert into baw_commodity_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="picture != null">picture,</if>
+            <if test="name != null">name,</if>
+            <if test="classificationId != null">classification_id,</if>
+            <if test="rotationMap != null">rotation_map,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="price != null">price,</if>
+            <if test="stock != null">stock,</if>
+            <if test="sales != null">sales,</if>
+            <if test="creatyTime != null">creaty_time,</if>
+            <if test="specifications != null">specifications,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="picture != null">#{picture},</if>
+            <if test="name != null">#{name},</if>
+            <if test="classificationId != null">#{classificationId},</if>
+            <if test="rotationMap != null">#{rotationMap},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="price != null">#{price},</if>
+            <if test="stock != null">#{stock},</if>
+            <if test="sales != null">#{sales},</if>
+            <if test="creatyTime != null">#{creatyTime},</if>
+            <if test="specifications != null">#{specifications},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawCommodityWx" parameterType="BawCommodityWx">
+        update baw_commodity_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="classificationId != null">classification_id = #{classificationId},</if>
+            <if test="rotationMap != null">rotation_map = #{rotationMap},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="stock != null">stock = #{stock},</if>
+            <if test="sales != null">sales = #{sales},</if>
+            <if test="creatyTime != null">creaty_time = #{creatyTime},</if>
+            <if test="specifications != null">specifications = #{specifications},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawCommodityWxById" parameterType="Integer">
+        delete from baw_commodity_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawCommodityWxByIds" parameterType="String">
+        delete from baw_commodity_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增车辆订购管理')" />
+    <th:block th:include="include :: bootstrap-fileinput-css"/>
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-baw_vehicle_ordering_wx-add">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">车系code：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" id="serviceCode" name="carSeriesCode" th:with=" type=${@seriesCodeDict.getSerierCode()}">
+                        <option value="请选择车系"> 请选择车系</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" required></option>
+                    </select>
+                </div>
+            </div>
+            <!-- 车型code -->
+            <div class="form-group">
+                <label class="col-sm-3 control-label">车型名称：</label>
+                <div class="col-sm-8">
+                    <select class="form-control m-b" name="modelCode" id="config" ></select>
+                </div>
+            </div>
+            <div class="form-group" style="display: none">
+                <label class="col-sm-3 control-label">车型名称：</label>
+                <div class="col-sm-8">
+                    <input name="modelName" class="form-control" type="text" id="modelName">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">颜色：</label>
+                <div class="col-sm-8">
+                    <input id="oneSelect" name="color" style="display:none " class="form-control" type="text">
+                    <select id="twoSelect" class="form-control m-b"  name="colorId" th:with=" type=${@dict.getType('baw_colour')}" onchange="colorChage()">
+                        <option value="请选择颜色"> 请选择颜色</option>
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" required></option>
+                    </select>
+                </div>
+            </div>
+<!--            <div class="form-group">-->
+<!--                <label class="col-sm-3 control-label">色值(#FFC0CB)：</label>-->
+<!--                <div class="col-sm-8">-->
+<!--                    <input name="colorValue" class="form-control" type="text">-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">色值：</label>
+                <div class="col-sm-8">
+                    <input type="hidden" name="colorValue">
+                    <div class="file-loading">
+                        <input class="form-control file-upload" id="colorValue" name="file" type="file">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">订购价（分）：</label>
+                <div class="col-sm-8">
+                    <input name="price" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">厂家指导价（分）：</label>
+                <div class="col-sm-8">
+                    <input name="guidancePrice" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">图片：</label>
+                <div class="col-sm-8">
+                    <input type="hidden" name="picture">
+                    <div class="file-loading">
+                        <input class="form-control file-upload" id="picture" name="file" type="file">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: bootstrap-fileinput-js"/>
+    <script th:inline="javascript">
+        var prefix = ctx + "wx/baw_vehicle_ordering_wx"
+        $("#form-baw_vehicle_ordering_wx-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-baw_vehicle_ordering_wx-add').serialize());
+            }
+        }
+        $("#serviceCode").ready(function () {
+            $.ajax({
+                url: prefix + "/getSerierCode",
+                type: 'GET',
+                data: {
+                    serviceCode: $("#serviceCode").val(),
+                },
+                success:function (data) {
+                    $("#config").empty();
+                    $("#config").append("<option value=''>请先选择车型</option>");
+                }
+            })
+        });
+        $("#serviceCode").change(function () {
+            if ($("#serviceCode").val() == '请先选择车系编号') {
+                $("#config").empty();
+                $("#config").append("<option value=''>请先选择车系</option>");
+            } else {
+                $.ajax({
+                    url: prefix + "/getSelectCarSeriesCodeApplet",
+                    type: 'GET',
+                    data: {
+                        serviceCode: $("#serviceCode").val(),
+                    },
+                    success: function (data) {
+                        $("#config").empty();
+                        $("#carType").empty();
+                        $("#config").append("<option value=''>请选择车型</option>");
+                        for (var i = 0; i < data.length; i++) {
+                            if(data[i].dictvalue==null|| data[i].dictvalue== undefined || data[i].dictvalue == ''){
+                            }else{
+                                $("#config").append(
+                                    "<option value='" + data[i].dictlable + "' required>" + data[i].dictvalue + "</option>"
+                                );
+                            }
+
+                        }
+                    }
+                })
+            }
+        });
+        $("#config").change(function () {
+            var config = $("#config option:selected").text();
+            document.getElementById("modelName").value = config;
+        })
+
+        $(".file-upload").fileinput({
+            uploadUrl: ctx + 'common/upload',
+            maxFileCount: 1,
+            autoReplace: true
+        }).on('fileuploaded', function (event, data, previewId, index) {
+            $("input[name='" + event.currentTarget.id + "']").val(data.response.url)
+        }).on('fileremoved', function (event, id, index) {
+            $("input[name='" + event.currentTarget.id + "']").val('')
+        })
+        function colorChage(){
+            $("#oneSelect").val($("#twoSelect").find("option:selected").text())
+        }
+    </script>
+</body>
+</html>

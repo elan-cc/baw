@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改车型配置参数，param_code为车型长，宽，高等参数对应code(由后台维护)，参数值为对应数值')" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-baw_base_car_config_param-edit" th:object="${bawBaseCarConfigParam}">
+        <input name="id" th:field="*{id}" type="hidden">
+        <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车系：</label>
+            <div class="col-sm-4">
+                <select class="form-control m-b" id="serviceCode" name="carSeriesCode" th:with=" type=${@seriesCodeDict.getSerierCode()}">
+                    <option th:each="dict : ${type}" th:field="*{carSeriesCode}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" required></option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车型编码：</label>
+            <div class="col-sm-4">
+                <select class="form-control m-b" name="carTypeCode" id="config" >
+                    <option  th:field="*{carTypeCode}" th:text="*{carTypeCode}" th:value="*{carTypeCode}"></option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="col-sm-5 control-label is-required">车型配置编码：</label>
+            <div class="col-sm-4">
+                <!--                <input name="carConfigCode" id="config" class="form-control" type="text" required>-->
+
+                <select class="form-control m-b" name="carConfigCode" id="carType" >
+                    <option  th:field="*{carConfigCode}" th:text="*{carConfigCode}" th:value="*{carConfigCode}"></option>
+
+                </select>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<th:block th:include="include :: footer" />
+<script th:inline="javascript">
+    var prefix = ctx + "wx/baw_base_car_config_param";
+    $("#form-baw_base_car_config_param-edit").validate({
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/edit1", $('#form-baw_base_car_config_param-edit').serialize());
+        }
+    }
+    $("#serviceCode").ready(function () {
+        // 初始化车型编码
+        $.ajax({
+            url: prefix + "/getSekectType",
+            type: 'GET',
+            data: {
+                serviceCode: $("#serviceCode").val(),
+            },
+            success:function (data) {
+                var service = $("#config").val();
+                $("#config").empty();
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].dictvalue === service) {
+                        $("#config").append(
+                            "<option value='" + data[i].dictvalue + "' selected='selected'>" + data[i].dictvalue + "</option>"
+                            +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                        );
+                    } else {
+                        $("#config").append(
+                            "<option value='" + data[i].dictvalue + "'>" + data[i].dictvalue + "</option>"
+                            +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                        );
+                    }
+                }
+            }
+
+        })
+        // 初始化车型配置编码
+        $.ajax({
+            url: prefix + "/getSelectCode",
+            type: 'GET',
+            data: {
+                config: $("#config").val(),
+            },
+            success:function (data) {
+                var carType= $("#carType").val()
+                $("#carType").empty();
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].dictvalue == carType) {
+                        $("#carType").append(
+                            "<option value='" + data[i].dictvalue + "' selected='selected'>" + data[i].dictvalue + "</option>"
+                            +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                        );
+                    } else {
+                        $("#carType").append(
+                            "<option value='" + data[i].dictvalue + "'>" + data[i].dictvalue + "</option>"
+                            +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                        );
+                    }
+                }
+
+            }
+        })
+    });
+    $("#serviceCode").change(function () {
+        if ($("#serviceCode").val() == '请先选择车系编号') {
+            $("#config").empty();
+            $("#config").append("<option value=''>请先选择车系编号</option>");
+            $("#carType").empty();
+            $("#carType").append("<option value=''>请先选择车辆型号</option>");
+        } else {
+            $.ajax({
+                url: prefix + "/getSekectType",
+                type: 'GET',
+                data: {
+                    serviceCode: $("#serviceCode").val(),
+                },
+                success: function (data) {
+                    $("#config").empty();
+                    $("#carType").empty();
+                    $("#config").append("<option value=''>请选择车系编号</option>");
+                    $("#carType").append("<option value=''>请先选择车辆型号</option>");
+                    for (var i = 0; i < data.length; i++) {
+                        var dealershop= $("#config").val()
+                        if (data[i].dictvalue == dealershop) {
+                            $("#region").append("<option value='" + data[i].dictvalue + "' selected='selected'>" + data[i].dictvalue + "</option>"
+                                +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+
+                            );
+                        }else {
+                        $("#config").append(
+                            "<option value='" + data[i].dictvalue + "' required>" + data[i].dictvalue + "</option>"
+                            +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                        )
+                        };
+                    }
+
+                }
+            })
+        }
+    });
+    $("#config").change(function () {
+        $.ajax({
+            url: prefix + "/getSelectCode",
+            type: 'GET',
+            data: {
+                config: $("#config").val(),
+            },
+            success:function (data) {
+                $("#carType").empty();
+                $("#carType").append("<option value=''>请选车辆型号</option>");
+                for (var i = 0; i < data.length; i++){
+                    $("#carType").append(
+                        "<option value='" + data[i].dictvalue + "'>" + data[i].dictvalue + "</option>"
+                        +"<OPTGROUP LABEL=" + data[i].dictlable + "></OPTGROUP>"
+                    );
+                }
+            }
+        })
+    });
+</script>
+</body>
+</html>

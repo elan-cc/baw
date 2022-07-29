@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawUserQuestionsWxMapper">
+
+    <resultMap type="BawUserQuestionsWx" id="BawUserQuestionsWxResult">
+        <result property="id"    column="id"    />
+        <result property="picture"    column="picture"    />
+        <result property="feedbackQuestions"    column="feedback_questions"    />
+        <result property="content"    column="content"    />
+        <result property="name"    column="name"    />
+        <result property="telephone"    column="telephone"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBawUserQuestionsWxVo">
+        select id, picture, feedback_questions, content, name, telephone, user_id, create_time, reply, remarks, respondent, reply_time from baw_user_questions_wx
+    </sql>
+
+    <select id="selectBawUserQuestionsWxList" parameterType="BawUserQuestionsWx" resultMap="BawUserQuestionsWxResult">
+        <include refid="selectBawUserQuestionsWxVo"/>
+        <where>
+            <if test="picture != null  and picture != ''"> and picture = #{picture}</if>
+            <if test="feedbackQuestions != null "> and feedback_questions = #{feedbackQuestions}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="telephone != null  and telephone != ''"> and telephone = #{telephone}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="reply != null  and reply != ''"> and reply = #{reply}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="respondent != null  and respondent != ''"> and respondent = #{respondent}</if>
+            <if test="replyTime != null "> and reply_time = #{replyTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBawUserQuestionsWxById" parameterType="Integer" resultMap="BawUserQuestionsWxResult">
+        <include refid="selectBawUserQuestionsWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawUserQuestionsWx" parameterType="BawUserQuestionsWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_user_questions_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="picture != null">picture,</if>
+            <if test="feedbackQuestions != null">feedback_questions,</if>
+            <if test="content != null">content,</if>
+            <if test="name != null">name,</if>
+            <if test="telephone != null">telephone,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="reply != null">reply,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="respondent != null">respondent,</if>
+            <if test="replyTime != null">reply_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="picture != null">#{picture},</if>
+            <if test="feedbackQuestions != null">#{feedbackQuestions},</if>
+            <if test="content != null">#{content},</if>
+            <if test="name != null">#{name},</if>
+            <if test="telephone != null">#{telephone},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="reply != null">#{reply},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="respondent != null">#{respondent},</if>
+            <if test="replyTime != null">#{replyTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawUserQuestionsWx" parameterType="BawUserQuestionsWx">
+        update baw_user_questions_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="picture != null">picture = #{picture},</if>
+            <if test="feedbackQuestions != null">feedback_questions = #{feedbackQuestions},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="telephone != null">telephone = #{telephone},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="reply != null">reply = #{reply},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="respondent != null">respondent = #{respondent},</if>
+            <if test="replyTime != null">reply_time = #{replyTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawUserQuestionsWxById" parameterType="Integer">
+        delete from baw_user_questions_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawUserQuestionsWxByIds" parameterType="String">
+        delete from baw_user_questions_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

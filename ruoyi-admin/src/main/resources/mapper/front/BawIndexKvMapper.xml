@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawIndexKvMapper">
+    
+    <resultMap type="BawIndexKv" id="BawIndexKvResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="kvType"    column="kv_type"    />
+        <result property="kvFile"    column="kv_file"    />
+        <result property="kvLink"    column="kv_link"    />
+        <result property="kvLinkTarget"    column="kv_link_target"    />
+        <result property="sort"    column="sort"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawIndexKvVo">
+        select id, title, kv_type, kv_file, kv_link, kv_link_target, sort, is_disable, is_delete, add_user, add_date from baw_index_kv
+    </sql>
+
+    <select id="selectBawIndexKvList" parameterType="BawIndexKv" resultMap="BawIndexKvResult">
+        <include refid="selectBawIndexKvVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by sort desc,id desc
+    </select>
+
+    <select id="selectBawIndexKvListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, title, kv_type, kv_file, kv_link, kv_link_target
+        from baw_index_kv
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by sort desc,id desc
+    </select>
+    
+    <select id="selectBawIndexKvById" parameterType="Integer" resultMap="BawIndexKvResult">
+        <include refid="selectBawIndexKvVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBawIndexKv" parameterType="BawIndexKv" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_index_kv
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">title,</if>
+            <if test="kvType != null">kv_type,</if>
+            <if test="kvFile != null and kvFile != ''">kv_file,</if>
+            <if test="kvLink != null">kv_link,</if>
+            <if test="kvLinkTarget != null">kv_link_target,</if>
+            <if test="sort != null">sort,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">#{title},</if>
+            <if test="kvType != null">#{kvType},</if>
+            <if test="kvFile != null and kvFile != ''">#{kvFile},</if>
+            <if test="kvLink != null">#{kvLink},</if>
+            <if test="kvLinkTarget != null">#{kvLinkTarget},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawIndexKv" parameterType="BawIndexKv">
+        update baw_index_kv
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null">title = #{title},</if>
+            <if test="kvType != null">kv_type = #{kvType},</if>
+            <if test="kvFile != null and kvFile != ''">kv_file = #{kvFile},</if>
+            <if test="kvLink != null">kv_link = #{kvLink},</if>
+            <if test="kvLinkTarget != null">kv_link_target = #{kvLinkTarget},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addUser != null">add_user = #{addUser},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawIndexKvById" parameterType="Integer">
+        update baw_index_kv set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawIndexKvByIds" parameterType="String">
+        update baw_index_kv set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawIndexKvByIdPhysic" parameterType="Integer">
+        delete from baw_index_kv where id = #{id}
+    </delete>
+
+    <delete id="deleteBawIndexKvByIdsPhysic" parameterType="String">
+        delete from baw_index_kv where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

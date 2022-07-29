@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawCommodityClassifyWxMapper">
+
+    <resultMap type="BawCommodityClassifyWx" id="BawCommodityClassifyWxResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="commodityCount"    column="commodity_count"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBawCommodityClassifyWxVo">
+        select id, name, parent_id, commodity_count, create_by, create_time,zero from baw_commodity_classify_wx
+    </sql>
+
+    <select id="selectBawCommodityClassifyWxList" parameterType="BawCommodityClassifyWx" resultMap="BawCommodityClassifyWxResult">
+        <include refid="selectBawCommodityClassifyWxVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="commodityCount != null "> and commodity_count = #{commodityCount}</if>
+            <if test="zero != null "> and zero = #{zero}</if>
+        </where>
+        and zero != 0
+    </select>
+
+    <select id="selectBawCommodityClassifyWxById" parameterType="Integer" resultMap="BawCommodityClassifyWxResult">
+        <include refid="selectBawCommodityClassifyWxVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawCommodityClassifyWx" parameterType="BawCommodityClassifyWx" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_commodity_classify_wx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="commodityCount != null">commodity_count,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="zero != null">zero,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="commodityCount != null">#{commodityCount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="zero != null">#{zero},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawCommodityClassifyWx" parameterType="BawCommodityClassifyWx">
+        update baw_commodity_classify_wx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="commodityCount != null">commodity_count = #{commodityCount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="zero != null">zero = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawCommodityClassifyWxById" parameterType="Long">
+        delete from baw_commodity_classify_wx where id = #{id}
+    </delete>
+
+    <delete id="deleteBawCommodityClassifyWxByIds" parameterType="String">
+        delete from baw_commodity_classify_wx where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="selectBawCommodityClassifyWxByName" resultType="org.springframework.ui.ModelMap">
+         SELECT
+                id AS dictValue,
+                `name` AS dictLabel
+
+        FROM
+                baw_commodity_classify_wx
+		WHERE
+				parent_id  = 0
+
+</select>
+
+    <select id="selectById" resultType="org.springframework.ui.ModelMap" parameterType="String">
+
+                SELECT
+                        id AS dictValue,
+                        `name` AS dictLabel
+                FROM
+                        baw_commodity_classify_wx
+                    WHERE
+                                        parent_id != 0 AND zero != 0
+
+    </select>
+
+</mapper>

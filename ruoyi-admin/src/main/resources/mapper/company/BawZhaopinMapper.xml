@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.BawZhaopinMapper">
+
+    <resultMap type="BawZhaopin" id="BawZhaopinResult">
+        <result property="id"    column="id"    />
+        <result property="jobName"    column="job_name"    />
+        <result property="jobType"    column="job_type"    />
+        <result property="zhaopinNum"    column="zhaopin_num"    />
+        <result property="workYears"    column="work_years"    />
+        <result property="jobCompany"    column="job_company"    />
+        <result property="jobPlace"    column="job_place"    />
+        <result property="jobEducation"    column="job_education"    />
+        <result property="jobSkills"    column="job_skills"    />
+        <result property="jobDuty"    column="job_duty"    />
+        <result property="jobRequire"    column="job_require"    />
+        <result property="isDisable"    column="is_disable"    />
+        <result property="isDelete"    column="is_delete"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="addDate"    column="add_date"    />
+    </resultMap>
+
+    <sql id="selectBawZhaopinVo">
+        select id, job_name, job_type, zhaopin_num, work_years, job_company, job_place, job_education, job_skills, job_duty, job_require, is_disable, is_delete, add_user, add_date from baw_zhaopin
+    </sql>
+
+    <select id="selectBawZhaopinList" parameterType="BawZhaopin" resultMap="BawZhaopinResult">
+        <include refid="selectBawZhaopinVo"/>
+        <where>
+            <if test="jobName != null  and jobName != ''"> and job_name like concat('%', #{jobName}, '%')</if>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectBawZhaopinListForApi" resultType="org.springframework.ui.ModelMap">
+        select id, job_name, job_type, zhaopin_num, work_years, job_company, job_place, job_education, job_skills, job_duty, job_require, add_date
+        from baw_zhaopin
+        <where>
+            <if test="isDelete != null "> and is_delete = #{isDelete}</if>
+            <if test="isDisable != null "> and is_disable = #{isDisable}</if>
+            <if test="jobName != null  and jobName != ''"> and job_name like concat('%', #{jobName}, '%')</if>
+            <if test="jobType != null  and jobType != ''"> and job_type like concat('%', #{jobType}, '%')</if>
+            <if test="jobPlace != null  and jobPlace != ''"> and job_place like concat('%', #{jobPlace}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectBawZhaopinJobPlaceListForApi" resultType="org.springframework.ui.ModelMap">
+        SELECT job_place FROM `baw_zhaopin` where is_delete = 0 and is_disable = 0 group by job_place order by job_place asc
+    </select>
+
+    <select id="selectBawZhaopinById" parameterType="Integer" resultMap="BawZhaopinResult">
+        <include refid="selectBawZhaopinVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertBawZhaopin" parameterType="BawZhaopin" useGeneratedKeys="true" keyProperty="id">
+        insert into baw_zhaopin
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jobName != null">job_name,</if>
+            <if test="jobType != null">job_type,</if>
+            <if test="zhaopinNum != null">zhaopin_num,</if>
+            <if test="workYears != null">work_years,</if>
+            <if test="jobCompany != null">job_company,</if>
+            <if test="jobPlace != null">job_place,</if>
+            <if test="jobEducation != null">job_education,</if>
+            <if test="jobSkills != null">job_skills,</if>
+            <if test="jobDuty != null">job_duty,</if>
+            <if test="jobRequire != null">job_require,</if>
+            <if test="isDisable != null">is_disable,</if>
+            <if test="isDelete != null">is_delete,</if>
+            <if test="addUser != null">add_user,</if>
+            <if test="addDate != null">add_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="jobName != null">#{jobName},</if>
+            <if test="jobType != null">#{jobType},</if>
+            <if test="zhaopinNum != null">#{zhaopinNum},</if>
+            <if test="workYears != null">#{workYears},</if>
+            <if test="jobCompany != null">#{jobCompany},</if>
+            <if test="jobPlace != null">#{jobPlace},</if>
+            <if test="jobEducation != null">#{jobEducation},</if>
+            <if test="jobSkills != null">#{jobSkills},</if>
+            <if test="jobDuty != null">#{jobDuty},</if>
+            <if test="jobRequire != null">#{jobRequire},</if>
+            <if test="isDisable != null">#{isDisable},</if>
+            <if test="isDelete != null">#{isDelete},</if>
+            <if test="addUser != null">#{addUser},</if>
+            <if test="addDate != null">#{addDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBawZhaopin" parameterType="BawZhaopin">
+        update baw_zhaopin
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="jobName != null">job_name = #{jobName},</if>
+            <if test="jobType != null">job_type = #{jobType},</if>
+            <if test="zhaopinNum != null">zhaopin_num = #{zhaopinNum},</if>
+            <if test="workYears != null">work_years = #{workYears},</if>
+            <if test="jobCompany != null">job_company = #{jobCompany},</if>
+            <if test="jobPlace != null">job_place = #{jobPlace},</if>
+            <if test="jobEducation != null">job_education = #{jobEducation},</if>
+            <if test="jobSkills != null">job_skills = #{jobSkills},</if>
+            <if test="jobDuty != null">job_duty = #{jobDuty},</if>
+            <if test="jobRequire != null">job_require = #{jobRequire},</if>
+            <if test="isDisable != null">is_disable = #{isDisable},</if>
+            <if test="isDelete != null">is_delete = #{isDelete},</if>
+            <if test="addUser != null">add_user = #{addUser},</if>
+            <if test="addDate != null">add_date = #{addDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBawZhaopinById" parameterType="Integer">
+        update baw_zhaopin set is_delete=1 where id = #{id}
+    </delete>
+
+    <delete id="deleteBawZhaopinByIds" parameterType="String">
+        update baw_zhaopin set is_delete=1 where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteBawZhaopinByIdPhysic" parameterType="Integer">
+        delete from baw_zhaopin where id = #{id}
+    </delete>
+
+    <delete id="deleteBawZhaopinByIdsPhysic" parameterType="String">
+        delete from baw_zhaopin where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
